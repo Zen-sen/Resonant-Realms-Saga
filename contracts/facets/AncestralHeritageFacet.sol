@@ -10,15 +10,12 @@ contract AncestralHeritageFacet {
 
     event TribeJoined(address indexed player, uint256 tribeId);
     event SynthesisBridgeSet(address indexed player, uint256 targetTribeId);
-    event WisdomShared(address indexed player, uint256 pointsEarned);
 
     function joinTribe(uint256 _tribeId) external {
         AppStorage storage ds = s();
-        require(!ds.hasChosenTribe[msg.sender], "You already belong to a tribe");
-        
+        require(!ds.hasChosenTribe[msg.sender], "Already belong to a tribe");
         ds.playerTribe[msg.sender] = _tribeId;
         ds.hasChosenTribe[msg.sender] = true;
-        
         emit TribeJoined(msg.sender, _tribeId);
     }
 
@@ -26,7 +23,6 @@ contract AncestralHeritageFacet {
         AppStorage storage ds = s();
         require(ds.playerTribe[msg.sender] == 11, "Must be Synthesis Tribe");
         require(_targetTribeID <= 10, "Invalid selection");
-        
         ds.synthesisBuff[msg.sender] = _targetTribeID;
         emit SynthesisBridgeSet(msg.sender, _targetTribeID);
     }
@@ -34,7 +30,6 @@ contract AncestralHeritageFacet {
     function earnWisdom(uint256 _amount) external {
         AppStorage storage ds = s();
         ds.ubuntuPoints[msg.sender] += _amount;
-        emit WisdomShared(msg.sender, _amount);
     }
 
     function getPlayerStats(address _player) external view returns (uint256 tribe, uint256 points, uint256 activeBuff) {
@@ -43,12 +38,8 @@ contract AncestralHeritageFacet {
     }
 
     function setTribe(uint256 _id, string calldata _name, string calldata _buff) external {
-        // Jupiter Scale logic: in a real environment, we'd check for ownership here
         AppStorage storage ds = s();
-        ds.tribes[_id] = Tribe({
-            name: _name,
-            buff: _buff,
-            isActive: true
-        });
+        require(msg.sender == ds.contractOwner, "Not the Architect");
+        ds.tribes[_id] = Tribe({ name: _name, buff: _buff, isActive: true });
     }
-} // <--- Ensure this final brace is present!
+}
