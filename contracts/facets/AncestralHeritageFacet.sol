@@ -1,37 +1,54 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.20;
 
-import { LibAppStorage, AppStorage } from "../libraries/LibAppStorage.sol";
+import { LibAppStorage, AppStorage, Tribe } from "../libraries/LibAppStorage.sol";
 
 contract AncestralHeritageFacet {
-    // Access the shared DNA of the Saga
     function s() internal pure returns (AppStorage storage) {
         return LibAppStorage.diamondStorage();
     }
 
     event TribeJoined(address indexed player, uint256 tribeId);
+    event SynthesisBridgeSet(address indexed player, uint256 targetTribeId);
     event WisdomShared(address indexed player, uint256 pointsEarned);
 
-    /// @notice Allow a seeker to join one of the ancient tribes
     function joinTribe(uint256 _tribeId) external {
         AppStorage storage ds = s();
-        require(ds.playerTribe[msg.sender] == 0, "You already belong to a tribe");
+        require(!ds.hasChosenTribe[msg.sender], "You already belong to a tribe");
         
         ds.playerTribe[msg.sender] = _tribeId;
+        ds.hasChosenTribe[msg.sender] = true;
+        
         emit TribeJoined(msg.sender, _tribeId);
     }
 
-    /// @notice Earn Ubuntu Points through mentorship or gameplay
+    function selectSynthesisBridge(uint256 _targetTribeID) external {
+        AppStorage storage ds = s();
+        require(ds.playerTribe[msg.sender] == 11, "Must be Synthesis Tribe");
+        require(_targetTribeID <= 10, "Invalid selection");
+        
+        ds.synthesisBuff[msg.sender] = _targetTribeID;
+        emit SynthesisBridgeSet(msg.sender, _targetTribeID);
+    }
+
     function earnWisdom(uint256 _amount) external {
         AppStorage storage ds = s();
         ds.ubuntuPoints[msg.sender] += _amount;
-        
         emit WisdomShared(msg.sender, _amount);
     }
 
-    /// @notice View your current standing in the Saga
-    function getPlayerStats(address _player) external view returns (uint256 tribe, uint256 points) {
+    function getPlayerStats(address _player) external view returns (uint256 tribe, uint256 points, uint256 activeBuff) {
         AppStorage storage ds = s();
-        return (ds.playerTribe[_player], ds.ubuntuPoints[_player]);
+        return (ds.playerTribe[_player], ds.ubuntuPoints[_player], ds.synthesisBuff[_player]);
     }
-}
+
+    function setTribe(uint256 _id, string calldata _name, string calldata _buff) external {
+        // Jupiter Scale logic: in a real environment, we'd check for ownership here
+        AppStorage storage ds = s();
+        ds.tribes[_id] = Tribe({
+            name: _name,
+            buff: _buff,
+            isActive: true
+        });
+    }
+} // <--- Ensure this final brace is present!

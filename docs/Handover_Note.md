@@ -12,4 +12,4 @@
 2. **Ubuntu Minting**: Link match-3 resonance to Ubuntu Point rewards.
 3. **Diamond Loupe**: Deploy the Loupe facet to allow real-time inspection.
 
-**Current Diamond Address**: 0x5FbDB2315678afecb367f032d93F642f64180aa3
+**Current Diamond Address**: 0fecb367f032d93F642f64180aa3

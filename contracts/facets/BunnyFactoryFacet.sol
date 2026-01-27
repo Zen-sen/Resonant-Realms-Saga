@@ -32,6 +32,7 @@ contract BunnyFactoryFacet {
     ) internal {
         AppStorage storage ds = LibAppStorage.diamondStorage();
         
+        // 6 fields: genes, birthTime, cooldownEndTime, matronId, sireId, generation
         Bunny memory _bunny = Bunny({
             genes: _genes,
             birthTime: uint64(block.timestamp),
