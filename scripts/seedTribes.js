@@ -2,10 +2,10 @@ import pkg from "hardhat";
 const { ethers } = pkg;
 
 async function main() {
-    // scripts/seedTribes.js
-const diamondAddress = "0xc6e7DF5E7b4f2A278906862b61205850344D4e7d";
+    // UPDATED: Your active Diamond Stone address from Milestone v1.4.0
+    const diamondAddress = "0x367761085BF3C12e5DA2Df99AC6E1a824612b8fb";
     
-    // 2. Use the Factory to attach (This bypasses the resolveName error)
+    // Attach to the Diamond via the Heritage interface
     const HeritageFacet = await ethers.getContractFactory("AncestralHeritageFacet");
     const heritage = HeritageFacet.attach(diamondAddress);
 
@@ -21,22 +21,27 @@ const diamondAddress = "0xc6e7DF5E7b4f2A278906862b61205850344D4e7d";
         { id: 8, name: "siSwati", buff: "Resource Doubling" },
         { id: 9, name: "isiNdebele", buff: "Combo Preservation" },
         { id: 10, name: "Afrikaaners", buff: "Trek Resilience" },
-        { id: 11, name: "Coloured", buff: "Synthesis Bridge" }
+        { id: 11, name: "Coloured", buff: "Synthesis Bridge" },
+        { id: 12, name: "Sovereignty", buff: "The Crown: Global Trust Node Activation" }
     ];
 
     console.log("--- Seeding the Resonant Realms Tribes ---");
+    console.log(`Target Stone: ${diamondAddress}\n`);
 
     for (const tribe of tribes) {
         process.stdout.write(`Bashing ${tribe.name} (ID: ${tribe.id})... `);
         
-        // This calls the setTribe function we just fused into the Diamond
-        const tx = await heritage.setTribe(tribe.id, tribe.name, tribe.buff);
-        await tx.wait();
-        
-        console.log("✅");
+        try {
+            const tx = await heritage.setTribe(tribe.id, tribe.name, tribe.buff);
+            await tx.wait();
+            console.log("✅");
+        } catch (err) {
+            console.log("❌");
+            console.error(`Error seeding ${tribe.name}:`, err.reason || err.message);
+        }
     }
 
-    console.log("\n✨ SUCCESS: All 12 Ancestral Paths are live in the Stone!");
+    console.log("\n✨ SUCCESS: All 13 Ancestral Paths are live in the Stone!");
 }
 
 main().catch((error) => {
