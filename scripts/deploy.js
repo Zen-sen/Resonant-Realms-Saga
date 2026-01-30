@@ -4,48 +4,43 @@ async function main() {
   const [deployer] = await ethers.getSigners();
   console.log("⚒️ Staging the Forge with account:", deployer.address);
 
-  // 1. Deploy the DiamondCutFacet first (The "Cutting Tool")
-  const DiamondCutFacet = await ethers.getContractFactory("DiamondCutFacet");
-  const cutFacet = await DiamondCutFacet.deploy();
-  await cutFacet.waitForDeployment();
-  const cutFacetAddress = await cutFacet.getAddress();
-  console.log("✂️ DiamondCutFacet manifested at:", cutFacetAddress);
-
-  // 2. Deploy the Diamond Stone (Pass BOTH arguments)
+  // 1. Deploy the Diamond Stone (The Proxy)
+  // Your Diamond.sol constructor takes: address _contractOwner
   const Diamond = await ethers.getContractFactory("Diamond");
-  // Arguments: (Owner Address, DiamondCutFacet Address)
-  const diamond = await Diamond.deploy(deployer.address, cutFacetAddress);
+  const diamond = await Diamond.deploy(deployer.address); 
   await diamond.waitForDeployment();
   const diamondAddress = await diamond.getAddress();
   console.log("💎 Diamond Stone manifested at:", diamondAddress);
 
-  // 3. Deploy the Ancestral Heritage Facet (The Game Logic)
+  // 2. Deploy Ancestral Heritage Facet (The Logic)
   const HeritageFacet = await ethers.getContractFactory("AncestralHeritageFacet");
   const heritageFacet = await HeritageFacet.deploy();
   await heritageFacet.waitForDeployment();
   const heritageAddress = await heritageFacet.getAddress();
   console.log("🏺 Ancestral Heritage Facet manifested at:", heritageAddress);
 
-  // 4. The Ritual of the Cut (Adding the Heritage functions)
-  const selectors = ["0x30663456", "0x56a64010"]; // joinTribe, getPlayerStats
-  const diamondCut = await ethers.getContractAt("IDiamondCut", diamondAddress);
+  // 3. The Ritual of Batch Registration
+  // We call your unique 'setFacetsBatch' function directly
+  console.log("⚔️ Architect is activating the Integration Layer...");
+
+  // Selectors for joinTribe(uint256) and getPlayerStats(address)
+  const selectors = ["0x30663456", "0x56a64010"]; 
+
+  // Use the Diamond's own ABI to call setFacetsBatch
+  const architect = await ethers.getContractAt("Diamond", diamondAddress);
   
-  console.log("⚔️ Performing the Diamond Cut...");
-  const tx = await diamondCut.diamondCut(
-    [{
-      facetAddress: heritageAddress,
-      action: 0, // Add
-      functionSelectors: selectors
-    }],
-    ethers.ZeroAddress,
-    "0x"
-  );
+  // This is the move that unlocks the stone using your custom logic
+  const tx = await architect.setFacetsBatch(selectors, heritageAddress);
   await tx.wait();
 
-  console.log("✨ SUCCESS: The Trust Node is fully integrated at:", diamondAddress);
+  console.log("---");
+  console.log("✨ SUCCESS: The Trust Node is fully integrated.");
+  console.log("📍 FINAL DIAMOND ADDRESS:", diamondAddress);
+  console.log("📍 LOGIC FACET LINKED:", heritageAddress);
+  console.log("---");
 }
 
 main().catch((error) => {
-  console.error(error);
+  console.error("❌ Forge Failure:", error);
   process.exitCode = 1;
 });
