@@ -16,5 +16,5 @@
 
 ## 🛠️ Technical Debt / Next Steps
 1. Implement `AncestralUtils.sol` for bitwise buff logic.
-2. Activate "Balanced Bridge" Synthesis for Tribe 12.
+2. Activate "Balanced Bridge" Synthesis for Tribe 12. ✅
 3. Link Match-3 Resonance scores to Ubuntu Point minting.
