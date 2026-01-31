@@ -1,33 +1,49 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.20;
 
-import "../libraries/LibAppStorage.sol";
+import { LibAppStorage, AppStorage, Bunny } from "../libraries/LibAppStorage.sol";
 
 contract BunnyFactoryFacet {
-    event GenesisMint(address indexed owner, uint256 bunnyId, uint256 genes);
+    
+    function mintGenesisBunny() external {
+        AppStorage storage ds = LibAppStorage.diamondStorage();
+        require(ds.contractOwner == msg.sender, "Only Architect can breath genesis");
+        _mint(msg.sender, 0, 0, 0, 0);
+    }
 
-    function mintGenesisBunny(uint256 _genes) external returns (uint256) {
+    /**
+     * @notice Mint Bunny #1+ using Ubuntu Points to influence genes
+     * @param _influenceTrait The bitwise trait to attempt to bake into the genes
+     */
+    function mintNextGeneration(uint256 _influenceTrait) external {
+        AppStorage storage ds = LibAppStorage.diamondStorage();
+        uint256 cost = 1000; 
+        require(ds.playerResonance[msg.sender] >= cost, "Insufficient Ubuntu Points");
+
+        ds.playerResonance[msg.sender] -= cost;
+        
+        // Genes are a mix of randomness and the influenced trait
+        uint256 newGenes = uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))) | _influenceTrait;
+        
+        _mint(msg.sender, newGenes, 0, 0, 1);
+    }
+
+    function _mint(address _to, uint256 _genes, uint32 _matronId, uint32 _sireId, uint16 _gen) internal {
         AppStorage storage ds = LibAppStorage.diamondStorage();
         
-        // Only the Stone Sovereign (Owner) can initiate the First Frequency
-        require(msg.sender == ds.contractOwner, "Only Sovereign can mint Genesis");
-
         Bunny memory _bunny = Bunny({
             genes: _genes,
-            birthTime: uint64(block.timestamp),
+            birthTime: block.timestamp,
             cooldownEndTime: 0,
-            matronId: 0,
-            sireId: 0,
-            generation: 0
+            matronId: _matronId,
+            sireId: _sireId,
+            generation: _gen
         });
 
-        uint256 newBunnyId = ds.bunnies.length;
         ds.bunnies.push(_bunny);
-        ds.bunnyIndexToOwner[newBunnyId] = msg.sender;
-        ds.ownerBunnyCount[msg.sender]++;
-
-        emit GenesisMint(msg.sender, newBunnyId, _genes);
-        return newBunnyId;
+        uint256 newBunnyId = ds.bunnies.length - 1;
+        ds.bunnyIndexToOwner[newBunnyId] = _to;
+        ds.ownerBunnyCount[_to]++;
     }
 
     function getBunny(uint256 _id) external view returns (Bunny memory) {
