@@ -1,8 +1,9 @@
 const { ethers } = require("hardhat");
 
 async function main() {
-  // CRITICAL: Updated to your LATEST successful Diamond address
-  const DIAMOND_ADDRESS = "0x9E545E3C0baAB3E08CdfD552C960A1050f373042";
+  // Living Stone Address - The Diamond Proxy
+  const DIAMOND_ADDRESS = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
+  
   const [admin] = await ethers.getSigners();
 
   console.log("🌬️ Initiating Genesis Breath for Bunny #0...");
@@ -25,8 +26,7 @@ async function main() {
     console.log("---");
     console.log("✨ SUCCESS: Bunny #0 (ǃKaggen) is breathing.");
     
-    // In Solidity, getPlayerStats returns a struct or multiple values
-    // We access them by index. 0 = TribeID, 1 = Resonance
+    // Access struct/tuple indices: 0 = TribeID, 1 = Resonance
     console.log("👤 Player Tribe ID:", stats[0].toString()); 
     console.log("🏺 Resonance Level:", stats[1].toString());
     console.log("---");

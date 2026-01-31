@@ -2,45 +2,53 @@ const { ethers } = require("hardhat");
 
 async function main() {
   const [deployer] = await ethers.getSigners();
-  console.log("⚒️ Staging the Forge with account:", deployer.address);
+  console.log("⚒️ Sovereign Forge: Manifesting the Stone...");
 
-  // 1. Deploy the Diamond Stone (The Proxy)
-  // Your Diamond.sol constructor takes: address _contractOwner
+  // 1. Deploy Logic Facets
+  const Heritage = await ethers.getContractFactory("AncestralHeritageFacet");
+  const heritage = await Heritage.deploy();
+  await heritage.waitForDeployment();
+  const heritageAddress = await heritage.getAddress();
+
+  const Factory = await ethers.getContractFactory("BunnyFactoryFacet");
+  const factory = await Factory.deploy();
+  await factory.waitForDeployment();
+  const factoryAddress = await factory.getAddress();
+
+  console.log("🏺 Heritage logic at:", heritageAddress);
+  console.log("🏺 Factory logic at:", factoryAddress);
+
+  // 2. Deploy the Stone (Diamond Proxy)
   const Diamond = await ethers.getContractFactory("Diamond");
-  const diamond = await Diamond.deploy(deployer.address); 
+  const diamond = await Diamond.deploy(deployer.address);
   await diamond.waitForDeployment();
   const diamondAddress = await diamond.getAddress();
-  console.log("💎 Diamond Stone manifested at:", diamondAddress);
+  console.log("💎 NEW SOVEREIGN STONE:", diamondAddress);
 
-  // 2. Deploy Ancestral Heritage Facet (The Logic)
-  const HeritageFacet = await ethers.getContractFactory("AncestralHeritageFacet");
-  const heritageFacet = await HeritageFacet.deploy();
-  await heritageFacet.waitForDeployment();
-  const heritageAddress = await heritageFacet.getAddress();
-  console.log("🏺 Ancestral Heritage Facet manifested at:", heritageAddress);
+  // 3. Complete Inscription
+  const stone = await ethers.getContractAt("Diamond", diamondAddress);
 
-  // 3. The Ritual of Batch Registration
-  // We call your unique 'setFacetsBatch' function directly
-  console.log("⚔️ Architect is activating the Integration Layer...");
+  console.log("⚔️ Inscribing all facets into the Stone...");
 
-  // Selectors for joinTribe(uint256) and getPlayerStats(address)
-  const selectors = ["0x30663456", "0x56a64010"]; 
+  const heritageSelectors = [
+    heritage.interface.getFunction("initializeTribalMatrix").selector,
+    heritage.interface.getFunction("joinTribe").selector,
+    heritage.interface.getFunction("getPlayerStats").selector,
+    heritage.interface.getFunction("getTribeCount").selector // <--- THE MISSING LINK
+  ];
 
-  // Use the Diamond's own ABI to call setFacetsBatch
-  const architect = await ethers.getContractAt("Diamond", diamondAddress);
-  
-  // This is the move that unlocks the stone using your custom logic
-  const tx = await architect.setFacetsBatch(selectors, heritageAddress);
-  await tx.wait();
+  const factorySelectors = [
+    factory.interface.getFunction("mintGenesisBunny").selector,
+    factory.interface.getFunction("getBunny").selector
+  ];
+
+  await stone.setFacetsBatch(heritageAddress, heritageSelectors);
+  await stone.setFacetsBatch(factoryAddress, factorySelectors);
 
   console.log("---");
-  console.log("✨ SUCCESS: The Trust Node is fully integrated.");
-  console.log("📍 FINAL DIAMOND ADDRESS:", diamondAddress);
-  console.log("📍 LOGIC FACET LINKED:", heritageAddress);
+  console.log("✨ SUCCESS: The Stone is fully operational.");
+  console.log("📍 NEW DIAMOND ADDRESS:", diamondAddress);
   console.log("---");
 }
 
-main().catch((error) => {
-  console.error("❌ Forge Failure:", error);
-  process.exitCode = 1;
-});
+main().catch(console.error);

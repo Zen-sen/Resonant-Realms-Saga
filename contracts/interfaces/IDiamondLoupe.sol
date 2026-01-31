@@ -1,28 +1,24 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.20;
+pragma solidity ^0.8.20;
 
 interface IDiamondLoupe {
     struct Facet {
         address facetAddress;
         bytes4[] functionSelectors;
     }
-
-    /// @notice Gets all facet addresses and their four byte function selectors.
-    /// @return facets_ Facet
+    
     function facets() external view returns (Facet[] memory facets_);
-
-    /// @notice Gets all the function selectors supported by a specific facet.
-    /// @param _facet The facet address.
-    /// @return facetFunctionSelectors_
     function facetFunctionSelectors(address _facet) external view returns (bytes4[] memory facetFunctionSelectors_);
-
-    /// @notice Get all the facet addresses used by a diamond.
-    /// @return facetAddresses_
     function facetAddresses() external view returns (address[] memory facetAddresses_);
-
-    /// @notice Gets the facet that supports the given selector.
-    /// @dev If facet is not found return address(0).
-    /// @param _functionSelector The HTTP function selector.
-    /// @return facetAddress_ The facet address.
     function facetAddress(bytes4 _functionSelector) external view returns (address facetAddress_);
+}
+
+interface IDiamondCut {
+    struct FacetCut {
+        address facetAddress;
+        uint8 action; // 0=Add, 1=Replace, 2=Remove
+        bytes4[] functionSelectors;
+    }
+    
+    function diamondCut(FacetCut[] calldata _diamondCut, address _init, bytes calldata _calldata) external;
 }

@@ -1,32 +1,47 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.20;
 
-import { LibAppStorage, AppStorage } from "../libraries/LibAppStorage.sol";
+struct Tribe {
+    string name;
+    string buff;
+    bool isActive;
+}
 
-contract AncestralHeritageFacet {
-    function mintAncestralBunny(
-        uint256 _dna, 
-        string calldata _resonance,
-        string calldata _adversaryBuffer
-    ) external {
-        AppStorage storage s = LibAppStorage.diamondStorage();
-        
-        // Match the naming convention in LibAppStorage: contractOwner
-        require(msg.sender == s.contractOwner, "Heritage: Only Sovereign can pulse");
-        
-        // Logic to push to the bunnies array in storage
-        // Note: Using the Bunny struct defined in your LibAppStorage
-        s.bunnies.push();
-        uint256 newUnitId = s.bunnies.length - 1;
-        
-        s.bunnies[newUnitId].genes = _dna;
-        // We can add additional metadata storage here as we expand the struct
-        
-        // Emit events or handle resonance mapping
-    }
+struct Bunny {
+    uint256 genes;
+    uint64 birthTime;
+    uint64 cooldownEndTime;
+    uint32 matronId;
+    uint32 sireId;
+    uint16 generation;
+}
 
-    function getDualityStatus(uint256 _unitId) external view returns (bool isHinge) {
-        AppStorage storage s = LibAppStorage.diamondStorage();
-        return (s.bunnies[_unitId].genes >> 250) & 1 == 1;
+struct AppStorage {
+    // --- Ancestral Game Data ---
+    mapping(uint256 => Tribe) tribes;
+    mapping(uint256 => address) bunnyIndexToOwner;
+    Bunny[] bunnies;
+    mapping(address => uint256) ownerBunnyCount;
+    mapping(address => uint256) playerTribe;      // Critical for joinTribe
+    mapping(address => uint256) playerResonance;  // Critical for Stats
+    
+    // --- Diamond Infrastructure ---
+    mapping(bytes4 => address) selectorToFacet;   // Required for Diamond proxy routing
+    address contractOwner;
+}
+
+library LibAppStorage {
+    /**
+     * @dev Compute the storage slot at compile time using Yul-style keccak256.
+     * In 0.8.20, keccak256("string literal") is a constant expression, 
+     * avoiding the assembly misalignment that triggered the TypeError.
+     */
+    bytes32 constant STORAGE_SLOT = keccak256("resonantrealms.storage.main");
+
+    function diamondStorage() internal pure returns (AppStorage storage ds) {
+        bytes32 slot = STORAGE_SLOT;
+        assembly {
+            ds.slot := slot
+        }
     }
 }
