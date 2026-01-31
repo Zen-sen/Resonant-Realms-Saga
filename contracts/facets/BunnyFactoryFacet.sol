@@ -2,8 +2,10 @@
 pragma solidity 0.8.20;
 
 import { LibAppStorage, AppStorage, Bunny } from "../libraries/LibAppStorage.sol";
+import { AncestralUtils } from "../libraries/AncestralUtils.sol";
 
 contract BunnyFactoryFacet {
+    using AncestralUtils for uint256;
 
     uint256 public constant BASE_MINT_COST = 1000;
     uint256 public constant AWAKENED_THRESHOLD = 1000;
@@ -25,8 +27,18 @@ contract BunnyFactoryFacet {
 
         require(ds.playerResonance[msg.sender] >= currentCost, "Insufficient Ubuntu Points");
         ds.playerResonance[msg.sender] -= currentCost;
-        uint256 newGenes = uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))) | _influenceTrait;
-        _mint(msg.sender, newGenes, 0, 0, 1);
+
+        // Generate genes and inject the tribal influence
+        uint256 randomGenes = uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender, ds.bunnies.length)));
+        uint256 finalGenes = randomGenes | _influenceTrait | tribeId;
+
+        _mint(msg.sender, finalGenes, 0, 0, 1);
+    }
+
+    function getBunnyPower(uint256 _id) external view returns (uint256) {
+        AppStorage storage ds = LibAppStorage.diamondStorage();
+        Bunny memory b = ds.bunnies[_id];
+        return b.genes.calculatePowerLevel(ds.playerResonance[ds.bunnyIndexToOwner[_id]]);
     }
 
     function _mint(address _to, uint256 _genes, uint32 _matronId, uint32 _sireId, uint16 _gen) internal {
