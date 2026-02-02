@@ -54,5 +54,5 @@ Infinite modularity. No limits. The "Diamond" allows the Resonant Realms to evol
 └── scripts/                        # Deployment Rites
 ```
 
-**Admin**: Zen-sen
+**Architect**: Zen-sen
 **Spirit**: Philosopher-Coder
