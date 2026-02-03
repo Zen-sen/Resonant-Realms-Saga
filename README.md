@@ -1,58 +1,25 @@
 # 🌌 Resonant Realms Saga: White-Label-Trust-Node
 
-> **"A tamper-evident hardware-to-blockchain rewards system. The first implementation: TrustBunnies."**
+> **"A tamper-evident hardware-to-blockchain rewards system. First implementation: TrustBunnies."**
 
----
+## 🏛️ Architecture: EIP-2535 Diamond Standard
+- **💎 Diamond.sol**: The central proxy (The Prism).
+- **📜 LibAppStorage.sol**: Unified state (The Ancestral Memory).
+- **🧩 Facets**: Modular logic (AncestralHeritage, BunnyFactory, Mentorship).
 
-## 🏛️ The Vision
-A bridge between ancestral wisdom and modern decentralization. **TrustBunnies** is an ancestral Match-3 and breeding ecosystem built on the **Pi Network**, utilizing hardware-to-blockchain rewards to ensure a "Trust-Node" experience for every player.
-
----
-
-## 🏗️ Architecture: EIP-2535 Diamond Standard
-Infinite modularity. No limits. The "Diamond" allows the Resonant Realms to evolve without breaking the ancestral lineage.
-
-* **💎 Diamond.sol**: The central proxy (The Prism).
-* **📜 LibAppStorage.sol**: Unified state (The Ancestral Memory).
-* **🧩 Facets**: Modular logic (AncestralHeritage, BunnyFactory, Mentorship).
-
----
-
-## 🛠️ Tech Stack
-- **Framework**: Hardhat / TypeScript
-- **Solidity**: 0.8.20 (Paris EVM)
-- **Memory Pattern**: AppStorage
-- **Target Network**: Pi Network / Polygon (Mumbai)
-- **Tooling**: Chainlink VRF (Provably Fair Genes)
-
----
-
-## 🚀 Getting Started (The Forge)
-1. **Initialize**: `npm install`
-2. **Compile**: `npx hardhat compile`
-3. **Deploy**: `npx hardhat run scripts/deploy.ts`
-
----
-
-## ✅ Portfolio Track & Milestones
-- **Ch-1 Visionary Fire**: 16-digit genes & VRF Minting. ✅
-- **Ch-2 Inheritance**: Bitwise Gene-Mix & Cooldowns. ✅
-- **Phase 3 (Gateway)**: Diamond Proxy Union. ✅
-- **Phase 4 (Vision)**: Tribal Activation & Next.js Integration. 🚧
-
----
+## 🚀 Active Deployment
+- **Network**: Localhost (Hardhat)
+- **Diamond Address**: 0x5FbDB2315678afecb367f032d93F642f64180aa3
+- **Status**: Phase 3 COMPLETED. ǃKaggen (Bunny #0) Manifested.
 
 ## 📁 Repository Structure
-```text
 .
 ├── contracts/
-│   ├── Diamond.sol                 # The Hub
-│   ├── facets/                     # Logic Scrolls
-│   ├── libraries/                  # Ancestral Math
-│   └── LibAppStorage.sol           # Global Memory
-├── docs/                           # White Paper & GDD
-└── scripts/                        # Deployment Rites
-```
-
-**Architect**: Zen-sen
-**Spirit**: Philosopher-Coder
+│   ├── Diamond.sol            # The Hub (Prism)
+│   ├── facets/                # Logic Scrolls (AncestralHeritage, BunnyFactory)
+│   ├── libraries/             # Ancestral Math (AncestralUtils)
+│   └── LibAppStorage.sol      # Global Memory (Hashed Namespace)
+├── docs/                      # The Knowledge Base
+│   ├── GDD.md                 # Game Design & Mechanics
+│   ├── White-Label-Spec.md    # Hardware-to-Blockchain Logic
+│   └── philosophy/            # Balanced Bridge & Tribal Synthesis

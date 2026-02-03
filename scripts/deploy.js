@@ -2,53 +2,39 @@ const { ethers } = require("hardhat");
 
 async function main() {
   const [deployer] = await ethers.getSigners();
-  console.log("⚒️ Sovereign Forge: Manifesting the Stone...");
+  console.log("⚒️ Sovereign Forge: Manifesting the Resonant Stone...");
 
-  // 1. Deploy Logic Facets
-  const Heritage = await ethers.getContractFactory("AncestralHeritageFacet");
-  const heritage = await Heritage.deploy();
-  await heritage.waitForDeployment();
-  const heritageAddress = await heritage.getAddress();
-
-  const Factory = await ethers.getContractFactory("BunnyFactoryFacet");
-  const factory = await Factory.deploy();
-  await factory.waitForDeployment();
-  const factoryAddress = await factory.getAddress();
-
-  console.log("🏺 Heritage logic at:", heritageAddress);
-  console.log("🏺 Factory logic at:", factoryAddress);
-
-  // 2. Deploy the Stone (Diamond Proxy)
+  // 1. Deploy the Diamond (The Stone)
+  // Your constructor ONLY takes the owner address
   const Diamond = await ethers.getContractFactory("Diamond");
   const diamond = await Diamond.deploy(deployer.address);
   await diamond.waitForDeployment();
   const diamondAddress = await diamond.getAddress();
   console.log("💎 NEW SOVEREIGN STONE:", diamondAddress);
 
-  // 3. Complete Inscription
-  const stone = await ethers.getContractAt("Diamond", diamondAddress);
+  // 2. Deploy BunnyFactoryFacet (The Life Logic)
+  const Factory = await ethers.getContractFactory("BunnyFactoryFacet");
+  const factory = await Factory.deploy();
+  await factory.waitForDeployment();
+  const factoryAddress = await factory.getAddress();
+  console.log("🏺 Factory logic at:", factoryAddress);
 
-  console.log("⚔️ Inscribing all facets into the Stone...");
-
-  const heritageSelectors = [
-    heritage.interface.getFunction("initializeTribalMatrix").selector,
-    heritage.interface.getFunction("joinTribe").selector,
-    heritage.interface.getFunction("getPlayerStats").selector,
-    heritage.interface.getFunction("getTribeCount").selector // <--- THE MISSING LINK
+  // 3. THE ARCHITECT'S INSCRIPTION
+  // We use your custom 'setFacetsBatch' method instead of diamondCut
+  console.log("⚔️ Inscribing Tribal Wisdom via setFacetsBatch...");
+  
+  const selectors = [
+    ethers.id("mintGenesisBunny(uint256)").substring(0, 10),
+    ethers.id("getBunny(uint256)").substring(0, 10),
+    ethers.id("getBunnyCount()").substring(0, 10),
+    ethers.id("getBunnyPower(uint256)").substring(0, 10)
   ];
 
-  const factorySelectors = [
-    factory.interface.getFunction("mintGenesisBunny").selector,
-    factory.interface.getFunction("getBunny").selector
-  ];
+  // Call setFacetsBatch on the Diamond address
+  const tx = await diamond.setFacetsBatch(factoryAddress, selectors);
+  await tx.wait();
 
-  await stone.setFacetsBatch(heritageAddress, heritageSelectors);
-  await stone.setFacetsBatch(factoryAddress, factorySelectors);
-
-  console.log("---");
-  console.log("✨ SUCCESS: The Stone is fully operational.");
-  console.log("📍 NEW DIAMOND ADDRESS:", diamondAddress);
-  console.log("---");
+  console.log("---\n✨ SUCCESS: The Stone is fully operational.\n📍 ADDRESS: " + diamondAddress + "\n---");
 }
 
 main().catch(console.error);
