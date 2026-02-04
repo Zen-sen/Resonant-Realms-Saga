@@ -1,41 +1,44 @@
 const { ethers } = require("hardhat");
 
 async function main() {
-  const DIAMOND_ADDRESS = "0x5081a39b8A5f0E35a8D959395a630b68B74Dd30f";
+  const DIAMOND_ADDRESS = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
   const [admin] = await ethers.getSigners();
 
-  console.log("🌬️ Initiating Genesis Breath for Bunny #0...");
-  console.log("📍 Target Diamond:", DIAMOND_ADDRESS);
+  console.log("\n🌬️ --- Initiating Genesis Breath for Bunny #0 (ǃKaggen) --- 🌬️");
 
   const heritage = await ethers.getContractAt("AncestralHeritageFacet", DIAMOND_ADDRESS);
   const factory = await ethers.getContractAt("BunnyFactoryFacet", DIAMOND_ADDRESS);
 
   try {
+    // 1. Initialize the Matrix (Establish the 13 Tribes)
     console.log("🌍 Initializing Tribal Matrix...");
     const initTx = await heritage.initializeTribalMatrix();
     await initTx.wait();
     console.log("   ✓ Matrix resonating");
 
-    console.log("🌍 Joining the Khoe-San Tribe (Index 0)...");
+    // 2. Join the Foundation (Khoe-San Tribe - Index 0)
+    console.log("🌍 Aligning Player with the Khoe-San Tribe...");
     const tribeTx = await heritage.joinTribe(0);
     await tribeTx.wait();
 
-    console.log("🏺 Forging Genesis Bunny #0 (ǃKaggen)...");
-    // Gene 0: The Primordial Frequency
-    const mintTx = await factory.mintGenesisBunny(0); 
+    // 3. The Birth of ǃKaggen
+    console.log("🏺 Forging Genesis Bunny #0...");
+    const mintTx = await factory.mintGenesisBunny(0); // Minting via Tribe 0
     await mintTx.wait();
 
-    const stats = await heritage.getPlayerStats(admin.address);
+    // 4. Verification
+    const count = await factory.getBunnyCount();
     const bunny = await factory.getBunny(0);
 
-    console.log("---");
+    console.log("\n--- Manifestation Report ---");
     console.log("✨ SUCCESS: ǃKaggen is locked into the Hashed Storage.");
-    console.log("👤 Player Tribe Alignment:", stats[0].toString());
-    console.log("🧬 Bunny #0 Genes:", bunny.genes.toString());
-    console.log("🎂 Birth Time:", new Date(Number(bunny.birthTime) * 1000).toLocaleString());
-    console.log("---");
+    console.log("🐰 Total Bunnies in Realm:", count.toString());
+    console.log("🧬 Bunny #0 DNA/Genes:", bunny.genes?.toString() || bunny.dna?.toString());
+    console.log("----------------------------\n");
+
   } catch (error) {
-    console.error("❌ Ritual Interrupted:", error.message);
+    console.error("❌ Ritual Interrupted:");
+    console.error(error.message);
   }
 }
 
