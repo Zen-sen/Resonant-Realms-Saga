@@ -20,7 +20,7 @@ async function main() {
     const stats = await heritage.getPlayerStats(admin.address);
 
     console.log("---");
-    console.log("✨ SUCCESS: Bunny #0 (ǃKaggen) is breathing.");
+    console.log("✨ SUCCESS: Human #0 (ǃKaggen) is breathing.");
     console.log("👤 Player Tribe ID:", stats[0].toString()); 
     console.log("🏺 Ubuntu Points:", stats[1].toString());
     console.log("---");

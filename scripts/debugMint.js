@@ -3,7 +3,7 @@ const { ethers } = require("hardhat");
 async function main() {
   const DIAMOND_ADDRESS = "0x8198f5d8F8CfFE8f9C413d98a0A55aEB8ab9FbB7";
   const [player] = await ethers.getSigners();
-  const factory = await ethers.getContractAt("BunnyFactoryFacet", DIAMOND_ADDRESS);
+  const factory = await ethers.getContractAt("HumanFactoryFacet", DIAMOND_ADDRESS);
 
   console.log("🧐 Running Diagnostic Mint...");
   

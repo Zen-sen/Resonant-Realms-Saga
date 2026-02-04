@@ -11,18 +11,18 @@ async function main() {
     const diamondAddr = await diamond.getAddress();
     console.log("💎 Diamond Stone manifest at:", diamondAddr);
 
-    // 2. Deploy BunnyFactoryFacet
-    const Factory = await ethers.getContractFactory("BunnyFactoryFacet");
+    // 2. Deploy HumanFactoryFacet
+    const Factory = await ethers.getContractFactory("HumanFactoryFacet");
     const factoryFacet = await Factory.deploy();
     await factoryFacet.waitForDeployment();
     const factoryAddr = await factoryFacet.getAddress();
-    console.log("✅ BunnyFactoryFacet deployed at:", factoryAddr);
+    console.log("✅ HumanFactoryFacet deployed at:", factoryAddr);
 
     // 3. The Diamond Cut (The Ritual of Linking)
     const selectors = [
-        factoryFacet.interface.getFunction("mintGenesisBunny").selector,
-        factoryFacet.interface.getFunction("getBunnyCount").selector,
-        factoryFacet.interface.getFunction("getBunny").selector
+        factoryFacet.interface.getFunction("mintGenesisHuman").selector,
+        factoryFacet.interface.getFunction("getHumanCount").selector,
+        factoryFacet.interface.getFunction("getHuman").selector
     ];
 
     console.log("✂️ Performing the Diamond Cut (Linking Selectors)...");
@@ -32,17 +32,17 @@ async function main() {
     // Adjust this to match your Diamond.sol function signature: setFacetsBatch(address, bytes4[])
     const cutTx = await diamondAsStone.setFacetsBatch(factoryAddr, selectors);
     await cutTx.wait();
-    console.log("🔗 Selectors successfully linked to BunnyFactoryFacet.");
+    console.log("🔗 Selectors successfully linked to HumanFactoryFacet.");
 
     // 4. Genesis Breathing Test
     console.log("🌬️ Attempting to manifest ǃKaggen...");
-    const diamondAsFactory = await ethers.getContractAt("BunnyFactoryFacet", diamondAddr);
+    const diamondAsFactory = await ethers.getContractAt("HumanFactoryFacet", diamondAddr);
     
     try {
-        const mintTx = await diamondAsFactory.mintGenesisBunny(0); // 0 = Khoe-San
+        const mintTx = await diamondAsFactory.mintGenesisHuman(0); // 0 = Khoe-San
         await mintTx.wait();
-        const count = await diamondAsFactory.getBunnyCount();
-        console.log("✨ ǃKaggen (Bunny #0) has drawn breath! Total Bunnies:", count.toString());
+        const count = await diamondAsFactory.getHumanCount();
+        console.log("✨ ǃKaggen (Human #0) has drawn breath! Total Bunnies:", count.toString());
     } catch (error) {
         console.error("❌ Ritual failed:", error.message);
     }

@@ -7,13 +7,13 @@ async function main() {
   console.log("--- Initiating Surgical Cut (Fully Qualified) ---");
 
   // 1. Deploy the new logic
-  const BunnyFactoryFacet = await ethers.getContractFactory("BunnyFactoryFacet");
-  const facet = await BunnyFactoryFacet.deploy();
+  const HumanFactoryFacet = await ethers.getContractFactory("HumanFactoryFacet");
+  const facet = await HumanFactoryFacet.deploy();
   await facet.waitForDeployment();
   const facetAddress = await facet.getAddress();
   
   // 2. Get the new selector
-  const newSelector = BunnyFactoryFacet.interface.getFunction("mintGenesisBunny(uint256)").selector;
+  const newSelector = HumanFactoryFacet.interface.getFunction("mintGenesisHuman(uint256)").selector;
 
   // 3. Perform the Cut using the Fully Qualified Name
   const diamondCut = await ethers.getContractAt(

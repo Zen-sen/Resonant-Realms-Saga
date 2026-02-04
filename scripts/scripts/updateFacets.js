@@ -6,10 +6,10 @@ async function main() {
 
   const diamondCutFacet = await ethers.getContractAt("IDiamondCut", diamondAddress);
 
-  // Function selector for mintAncestralBunny(uint256,uint256,string,string)
+  // Function selector for mintAncestralHuman(uint256,uint256,string,string)
   // You can also get this dynamically from the contract interface
   const selectors = [
-    ethers.id("mintAncestralBunny(uint256,uint256,string,string)").substring(0, 10),
+    ethers.id("mintAncestralHuman(uint256,uint256,string,string)").substring(0, 10),
     ethers.id("getDualityStatus(uint256)").substring(0, 10)
   ];
 

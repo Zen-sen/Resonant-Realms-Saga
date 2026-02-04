@@ -5,13 +5,13 @@ async function main() {
   const [deployer] = await ethers.getSigners();
   
   // Directly calling the signature to see the raw revert
-  const data = ethers.id("getBunny(uint256)").substring(0, 10);
+  const data = ethers.id("getHuman(uint256)").substring(0, 10);
   console.log("Calling selector:", data);
   
   try {
     const result = await deployer.call({
       to: diamondAddress,
-      data: data + "0000000000000000000000000000000000000000000000000000000000000000" // Bunny #0
+      data: data + "0000000000000000000000000000000000000000000000000000000000000000" // Human #0
     });
     console.log("Raw Result:", result);
   } catch (e) {

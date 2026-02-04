@@ -6,7 +6,7 @@ async function main() {
 
   console.log("--- Initiating The Great Cut (Explicit Mode) ---");
 
-  const FacetNames = ["DiamondLoupeFacet", "BunnyFactoryFacet"];
+  const FacetNames = ["DiamondLoupeFacet", "HumanFactoryFacet"];
   const cut = [];
 
   for (const name of FacetNames) {

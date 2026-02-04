@@ -12,7 +12,7 @@ async function main() {
   console.log("1. DIAMOND STONE LIVE AT:", diamondAddr);
 
   // 2. Deploy Facets
-  const FacetNames = ["DiamondLoupeFacet", "BunnyFactoryFacet"];
+  const FacetNames = ["DiamondLoupeFacet", "HumanFactoryFacet"];
   
   for (const name of FacetNames) {
     const Facet = await ethers.getContractFactory(name);

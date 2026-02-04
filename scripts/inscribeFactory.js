@@ -3,8 +3,8 @@ const { ethers } = require("hardhat");
 async function main() {
   const DIAMOND_ADDRESS = "0x9A676e781A523b5d0C0e43731313A708CB607508";
   
-  console.log("⚒️ Manifesting the Bunny Factory...");
-  const Factory = await ethers.getContractFactory("BunnyFactoryFacet");
+  console.log("⚒️ Manifesting the Human Factory...");
+  const Factory = await ethers.getContractFactory("HumanFactoryFacet");
   const factory = await Factory.deploy();
   await factory.waitForDeployment();
   const factoryAddress = await factory.getAddress();
@@ -16,8 +16,8 @@ async function main() {
   const stone = await ethers.getContractAt("contracts/interfaces/IDiamondCut.sol:IDiamondCut", DIAMOND_ADDRESS);
 
   const selectors = [
-    factory.interface.getFunction("mintGenesisBunny").selector,
-    factory.interface.getFunction("getBunny").selector
+    factory.interface.getFunction("mintGenesisHuman").selector,
+    factory.interface.getFunction("getHuman").selector
   ];
 
   console.log("⚔️ Using setFacetsBatch to inscribe the Factory...");

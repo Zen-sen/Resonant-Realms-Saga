@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.20;
 
-import { LibAppStorage, AppStorage, Bunny } from "../libraries/LibAppStorage.sol";
+import { LibAppStorage, AppStorage, Human } from "../libraries/LibAppStorage.sol";
 
-contract BunnyFactoryFacet {
-    function mintGenesisBunny(uint256 _tribeId) external {
+contract HumanFactoryFacet {
+    function mintGenesisHuman(uint256 _tribeId) external {
         AppStorage storage ds = LibAppStorage.diamondStorage();
         uint256 bunnyId = ds.bunnyCount;
 
-        ds.bunnies[bunnyId] = Bunny({
+        ds.bunnies[bunnyId] = Human({
             genes: uint256(keccak256(abi.encodePacked(block.timestamp, bunnyId))),
             birthTime: block.timestamp,
             tribeId: _tribeId,
@@ -21,15 +21,15 @@ contract BunnyFactoryFacet {
         });
 
         ds.bunnyIndexToOwner[bunnyId] = msg.sender;
-        ds.ownerBunnyCount[msg.sender]++;
+        ds.ownerHumanCount[msg.sender]++;
         ds.bunnyCount++;
     }
 
-    function getBunnyCount() external view returns (uint256) {
+    function getHumanCount() external view returns (uint256) {
         return LibAppStorage.diamondStorage().bunnyCount;
     }
 
-    function getBunny(uint256 _id) external view returns (Bunny memory) {
+    function getHuman(uint256 _id) external view returns (Human memory) {
         return LibAppStorage.diamondStorage().bunnies[_id];
     }
 }

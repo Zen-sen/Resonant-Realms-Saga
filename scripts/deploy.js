@@ -12,8 +12,8 @@ async function main() {
   const diamondAddress = await diamond.getAddress();
   console.log("💎 NEW SOVEREIGN STONE:", diamondAddress);
 
-  // 2. Deploy BunnyFactoryFacet (The Life Logic)
-  const Factory = await ethers.getContractFactory("BunnyFactoryFacet");
+  // 2. Deploy HumanFactoryFacet (The Life Logic)
+  const Factory = await ethers.getContractFactory("HumanFactoryFacet");
   const factory = await Factory.deploy();
   await factory.waitForDeployment();
   const factoryAddress = await factory.getAddress();
@@ -24,10 +24,10 @@ async function main() {
   console.log("⚔️ Inscribing Tribal Wisdom via setFacetsBatch...");
   
   const selectors = [
-    ethers.id("mintGenesisBunny(uint256)").substring(0, 10),
-    ethers.id("getBunny(uint256)").substring(0, 10),
-    ethers.id("getBunnyCount()").substring(0, 10),
-    ethers.id("getBunnyPower(uint256)").substring(0, 10)
+    ethers.id("mintGenesisHuman(uint256)").substring(0, 10),
+    ethers.id("getHuman(uint256)").substring(0, 10),
+    ethers.id("getHumanCount()").substring(0, 10),
+    ethers.id("getHumanPower(uint256)").substring(0, 10)
   ];
 
   // Call setFacetsBatch on the Diamond address

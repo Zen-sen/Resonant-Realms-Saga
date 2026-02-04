@@ -2,17 +2,17 @@ const { ethers } = require("hardhat");
 
 async function main() {
   const diamondAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
-  const factory = await ethers.getContractAt("BunnyFactoryFacet", diamondAddress);
+  const factory = await ethers.getContractAt("HumanFactoryFacet", diamondAddress);
 
-  console.log("🌬️ Checking the manifestation of Bunny #0 (ǃKaggen)...");
+  console.log("🌬️ Checking the manifestation of Human #0 (ǃKaggen)...");
 
   try {
-    const count = await factory.getBunnyCount();
+    const count = await factory.getHumanCount();
     console.log("Total Bunnies in Realm:", count.toString());
 
     if (count > 0n) {
-      const bunny = await factory.getBunny(0);
-      console.log("--- Raw Bunny Data ---");
+      const bunny = await factory.getHuman(0);
+      console.log("--- Raw Human Data ---");
       console.log(bunny); 
       console.log("----------------------");
       

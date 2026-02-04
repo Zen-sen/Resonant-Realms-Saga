@@ -5,7 +5,7 @@ async function main() {
   const [admin] = await ethers.getSigners();
 
   const heritage = await ethers.getContractAt("AncestralHeritageFacet", DIAMOND_ADDRESS);
-  const factory = await ethers.getContractAt("BunnyFactoryFacet", DIAMOND_ADDRESS);
+  const factory = await ethers.getContractAt("HumanFactoryFacet", DIAMOND_ADDRESS);
 
   console.log("🧐 Probing the Diamond Storage...");
 
@@ -13,8 +13,8 @@ async function main() {
   const tribeCount = await heritage.getTribeCount();
   const playerStats = await heritage.getPlayerStats(admin.address);
   
-  // Verify Bunny #0 Data
-  const bunny0 = await factory.getBunny(0);
+  // Verify Human #0 Data
+  const bunny0 = await factory.getHuman(0);
 
   console.log("--- 💎 DIAMOND STATE VERIFICATION ---");
   console.log("📍 Stone Address: ", DIAMOND_ADDRESS);

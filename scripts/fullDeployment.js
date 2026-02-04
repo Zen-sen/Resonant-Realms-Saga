@@ -21,11 +21,11 @@ async function main() {
     const heritageAddress = await heritageFacet.getAddress();
     console.log("2. AncestralHeritageFacet at:", heritageAddress);
 
-    const FactoryFacet = await ethers.getContractFactory("BunnyFactoryFacet");
+    const FactoryFacet = await ethers.getContractFactory("HumanFactoryFacet");
     const factoryFacet = await FactoryFacet.deploy();
     await factoryFacet.waitForDeployment();
     const factoryAddress = await factoryFacet.getAddress();
-    console.log("3. BunnyFactoryFacet at:", factoryAddress);
+    console.log("3. HumanFactoryFacet at:", factoryAddress);
 
     // 3. Linking Ritual (Linking Heritage)
     console.log("Linking Ancestral Logic...");
@@ -51,7 +51,7 @@ async function main() {
     // 4. Linking Ritual (Linking Factory)
     console.log("Linking Factory Logic...");
     const factorySelectors = [
-        factoryFacet.interface.getFunction("createGenesisBunny").selector
+        factoryFacet.interface.getFunction("createGenesisHuman").selector
     ];
     await (await diamond.setFacetsBatch(factorySelectors, factoryAddress)).wait();
 

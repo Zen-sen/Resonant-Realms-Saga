@@ -7,7 +7,7 @@ struct Tribe {
     bool isActive;
 }
 
-struct Bunny {
+struct Human {
     uint256 genes;
     uint256 birthTime;
     uint256 tribeId;
@@ -36,11 +36,11 @@ struct AppStorage {
     mapping(address => uint256) lastGiftTime;
     mapping(uint256 => uint256) tribePools; // The communal reservoir
     
-    // --- Resonant Realms: Bunny Data ---
-    mapping(uint256 => Bunny) bunnies;
+    // --- Resonant Realms: Human Data ---
+    mapping(uint256 => Human) bunnies;
     uint256 bunnyCount;
     mapping(uint256 => address) bunnyIndexToOwner;
-    mapping(address => uint256) ownerBunnyCount;
+    mapping(address => uint256) ownerHumanCount;
 }
 
 library LibAppStorage {

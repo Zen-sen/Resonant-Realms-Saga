@@ -3,29 +3,29 @@ const { ethers } = require("hardhat");
 async function main() {
   const diamondAddress = "0x95401dc811bb5740090279Ba06cfA8fcF6113778";
   const [deployer] = await ethers.getSigners();
-  const factory = await ethers.getContractAt("BunnyFactoryFacet", diamondAddress);
+  const factory = await ethers.getContractAt("HumanFactoryFacet", diamondAddress);
 
   console.log("--- 🕯️ Seeding the Key Bloodlines ---");
   // We mint a few to test the registry
-  const tx0 = await factory.mintGenesisBunny(0); // Khoe-San
+  const tx0 = await factory.mintGenesisHuman(0); // Khoe-San
   await tx0.wait();
   console.log("Khoe-San Awakened.");
 
-  const tx1 = await factory.mintGenesisBunny(12); // Bridge
+  const tx1 = await factory.mintGenesisHuman(12); // Bridge
   await tx1.wait();
   console.log("The Bridge Awakened.");
 
   console.log("\n--- 💎 Reading Tribal Wisdom ---");
   
   // Checking if the Diamond knows these functions
-  const count = await factory.getBunnyCount();
+  const count = await factory.getHumanCount();
   console.log(`Total Ancestors: ${count}`);
   
   for(let i = 0; i < count; i++) {
-      const power = await factory.getBunnyPower(i);
-      const bunny = await factory.getBunny(i);
+      const power = await factory.getHumanPower(i);
+      const bunny = await factory.getHuman(i);
       const tribeId = Number(bunny.genes & 0xFFFFn);
-      console.log(`Bunny #${i} [Tribe ${tribeId}]: ${power}`);
+      console.log(`Human #${i} [Tribe ${tribeId}]: ${power}`);
   }
 }
 

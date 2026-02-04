@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.20;
 
-import { LibAppStorage, AppStorage, Bunny } from "../libraries/LibAppStorage.sol";
+import { LibAppStorage, AppStorage, Human } from "../libraries/LibAppStorage.sol";
 
 contract BreedingFacet {
     function breed(uint256 _matronId, uint256 _sireId) external {
@@ -10,8 +10,8 @@ contract BreedingFacet {
         require(ds.bunnyIndexToOwner[_matronId] == msg.sender, "Not your matron");
         require(ds.bunnyIndexToOwner[_sireId] == msg.sender, "Not your sire");
         
-        Bunny storage matron = ds.bunnies[_matronId];
-        Bunny storage sire = ds.bunnies[_sireId];
+        Human storage matron = ds.bunnies[_matronId];
+        Human storage sire = ds.bunnies[_sireId];
 
         // Genetic Crossover logic
         uint256 childGenes = (matron.genes & 0xFFFFFFFF00000000) | (sire.genes & 0x00000000FFFFFFFF);
@@ -30,7 +30,7 @@ contract BreedingFacet {
         AppStorage storage ds = LibAppStorage.diamondStorage();
         uint256 newId = ds.bunnyCount;
         
-        ds.bunnies[newId] = Bunny({
+        ds.bunnies[newId] = Human({
             genes: _genes,
             birthTime: block.timestamp,
             tribeId: ds.playerTribe[_owner],
@@ -43,7 +43,7 @@ contract BreedingFacet {
         });
 
         ds.bunnyIndexToOwner[newId] = _owner;
-        ds.ownerBunnyCount[_owner]++;
+        ds.ownerHumanCount[_owner]++;
         ds.bunnyCount++;
     }
 }

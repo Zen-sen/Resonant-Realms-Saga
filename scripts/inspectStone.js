@@ -4,7 +4,7 @@ async function main() {
   const DIAMOND_ADDRESS = "0x8198f5d8F8CfFE8f9C413d98a0A55aEB8ab9FbB7";
   const loupe = await ethers.getContractAt("DiamondLoupeFacet", DIAMOND_ADDRESS);
   const heritage = await ethers.getContractFactory("AncestralHeritageFacet");
-  const factory = await ethers.getContractFactory("BunnyFactoryFacet");
+  const factory = await ethers.getContractFactory("HumanFactoryFacet");
   const mentorship = await ethers.getContractFactory("MentorshipFacet");
 
   console.log("💎 --- DIAMOND INSPECTION REPORT --- 💎");
@@ -16,7 +16,7 @@ async function main() {
   };
 
   await check("Heritage", heritage, "joinTribe");
-  await check("Factory", factory, "mintGenesisBunny");
+  await check("Factory", factory, "mintGenesisHuman");
   await check("Mentorship", mentorship, "recordAwakening");
   await check("Loupe", (await ethers.getContractFactory("DiamondLoupeFacet")), "facetAddress");
 

@@ -14,8 +14,8 @@ async function main() {
 
   // The functions the Stone is currently "forgetting"
   const selectors = [
-    ethers.id("getBunnyCount()").substring(0, 10),
-    ethers.id("getBunnyPower(uint256)").substring(0, 10)
+    ethers.id("getHumanCount()").substring(0, 10),
+    ethers.id("getHumanPower(uint256)").substring(0, 10)
   ];
 
   const cut = [{
@@ -27,7 +27,7 @@ async function main() {
   try {
     const tx = await diamondCut.diamondCut(cut, ethers.ZeroAddress, "0x");
     await tx.wait();
-    console.log("✨ SUCCESS: The Stone now recognizes getBunnyCount and getBunnyPower.");
+    console.log("✨ SUCCESS: The Stone now recognizes getHumanCount and getHumanPower.");
   } catch (error) {
     if (error.message.includes("already exists")) {
       console.log("🔄 Selectors exist but might point to old logic. Replacing...");

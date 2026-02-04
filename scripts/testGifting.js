@@ -14,7 +14,7 @@ async function main() {
   console.log("👤 Newcomer joining the Khoe-San Tribe...");
   await heritage.connect(newcomer).joinTribe(0);
 
-  // 2. Check Architect Balance (Should be around 201 after minting Bunny #1)
+  // 2. Check Architect Balance (Should be around 201 after minting Human #1)
   const archBalanceBefore = await mentorship.getUbuntuPoints(architect.address);
   console.log("💰 Architect Balance:", archBalanceBefore.toString());
 

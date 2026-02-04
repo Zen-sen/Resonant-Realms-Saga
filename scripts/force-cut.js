@@ -12,8 +12,8 @@ async function main() {
   );
 
   const selectors = [
-    ethers.id("getBunnyCount()").substring(0, 10),
-    ethers.id("getBunnyPower(uint256)").substring(0, 10)
+    ethers.id("getHumanCount()").substring(0, 10),
+    ethers.id("getHumanPower(uint256)").substring(0, 10)
   ];
 
   console.log("--- ⚔️ Performing Manual Diamond Cut ---");

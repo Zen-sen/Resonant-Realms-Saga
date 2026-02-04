@@ -5,16 +5,16 @@ async function main() {
   const [deployer] = await ethers.getSigners();
 
   // 1. Get the new Facet instance
-  const BunnyFactoryFacet = await ethers.getContractFactory("BunnyFactoryFacet");
-  const facet = await BunnyFactoryFacet.deploy();
+  const HumanFactoryFacet = await ethers.getContractFactory("HumanFactoryFacet");
+  const facet = await HumanFactoryFacet.deploy();
   await facet.waitForDeployment();
   const facetAddress = await facet.getAddress();
 
-  console.log("New BunnyFactoryFacet deployed to:", facetAddress);
+  console.log("New HumanFactoryFacet deployed to:", facetAddress);
 
   // 2. Prepare the Diamond Cut
-  // We need to replace the mintGenesisBunny selector
-  const selectors = ["0x498e79e6"]; // This is the old mintGenesisBunny() selector
+  // We need to replace the mintGenesisHuman selector
+  const selectors = ["0x498e79e6"]; // This is the old mintGenesisHuman() selector
   // Note: For simplicity in this local dev environment, 
   // we usually just re-run the deployment or use a Loupe to find all selectors.
   
@@ -22,7 +22,7 @@ async function main() {
   const diamondCut = await ethers.getContractAt("IDiamondCut", diamondAddress);
   
   const newSelectors = [
-    BunnyFactoryFacet.interface.getFunction("mintGenesisBunny").selector
+    HumanFactoryFacet.interface.getFunction("mintGenesisHuman").selector
   ];
 
   console.log("Inscribing new selector:", newSelectors[0]);
