@@ -1,0 +1,68 @@
+diff --git a/.gitignore b/.gitignore
+index fa43500..05fba52 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -5,3 +5,4 @@ cache
+ coverage
+ .openzeppelin
+ *.log
++.env
+diff --git a/contracts/facets/HumanFactoryFacet.sol b/contracts/facets/HumanFactoryFacet.sol
+index 0884798..d286fbd 100644
+--- a/contracts/facets/HumanFactoryFacet.sol
++++ b/contracts/facets/HumanFactoryFacet.sol
+@@ -1,35 +1,31 @@
+ // SPDX-License-Identifier: MIT
+ pragma solidity 0.8.20;
+ 
+-import { LibAppStorage, AppStorage, Human } from "../libraries/LibAppStorage.sol";
++import { LibAppStorage } from "../libraries/LibAppStorage.sol";
++import { AncestralUtils } from "../libraries/AncestralUtils.sol";
+ 
+ contract HumanFactoryFacet {
+-    function mintGenesisHuman(uint256 _tribeId) external {
+-        AppStorage storage ds = LibAppStorage.diamondStorage();
+-        uint256 bunnyId = ds.bunnyCount;
++    LibAppStorage.AppStorage internal s;
+ 
+-        ds.bunnies[bunnyId] = Human({
+-            genes: uint256(keccak256(abi.encodePacked(block.timestamp, bunnyId))),
++    event HumanBorn(uint256 indexed humanId, uint256 dna, uint256 tribeId);
++
++    // This is the function humanGenesis.js is looking for
++    function mintHuman(uint256 _tribeId) external {
++        uint256 dna = AncestralUtils.generateGenesisGenes(_tribeId);
++        
++        uint256 humanId = s.humanCount;
++        s.humans[humanId] = LibAppStorage.Human({
++            dna: dna,
+             birthTime: block.timestamp,
+-            tribeId: _tribeId,
+-            generation: 0,
+-            resonance: 100, // Genesis bonus
+-            level: 1,
+-            matronId: 0,
+-            sireId: 0,
+-            cooldownEnd: block.timestamp
++            tribeId: _tribeId
+         });
+ 
+-        ds.bunnyIndexToOwner[bunnyId] = msg.sender;
+-        ds.ownerHumanCount[msg.sender]++;
+-        ds.bunnyCount++;
+-    }
++        s.humanCount++;
+ 
+-    function getHumanCount() external view returns (uint256) {
+-        return LibAppStorage.diamondStorage().bunnyCount;
++        emit HumanBorn(humanId, dna, _tribeId);
+     }
+ 
+-    function getHuman(uint256 _id) external view returns (Human memory) {
+-        return LibAppStorage.diamondStorage().bunnies[_id];
++    function getHumanCount() external view returns (uint256) {
++        return s.humanCount;
+     }
+-}
++}
+\ No newline at end of file

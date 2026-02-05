@@ -1,42 +1,34 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.20;
 
-import { LibAppStorage } from "../libraries/LibAppStorage.sol";
-import { AncestralUtils } from "../libraries/AncestralUtils.sol";
+import { LibAppStorage, AppStorage, Bunny, Human } from "../libraries/LibAppStorage.sol";
 
 contract HumanFactoryFacet {
-    event HumanBorn(uint256 indexed humanId, uint256 dna, uint256 tribeId);
+    event HumanAwakened(uint256 indexed bunnyId, uint256 indexed humanId, address owner);
 
-    function mintHuman(uint256 _tribeId) external {
-        // ✅ CORRECT - Use diamondStorage()
-        LibAppStorage.AppStorage storage s = LibAppStorage.diamondStorage();
+    function awakenHuman(uint256 _bunnyId) external {
+        AppStorage storage s = LibAppStorage.diamondStorage();
         
-        // Add access control
-        require(msg.sender == s.allowedMinter, "Not authorized");
+        require(s.bunnyIndexToOwner[_bunnyId] == msg.sender, "Auditor: Not your Bunny");
+        Bunny storage targetBunny = s.bunnies[_bunnyId];
+        
+        require(targetBunny.resonance >= 100, "Inadequate Resonance for awakening");
 
-        uint256 dna = AncestralUtils.generateGenesisGenes(_tribeId);
-        uint256 humanId = s.humanCount;
+        uint256 newHumanId = s.humanCount;
 
-        s.humans[humanId] = LibAppStorage.Human({
-            dna: dna,
-            birthTime: block.timestamp,
-            tribeId: _tribeId
+        s.humans[newHumanId] = Human({
+            dna: targetBunny.genes ^ uint256(keccak256(abi.encodePacked("AWAKEN", block.timestamp))),
+            awakenedTime: block.timestamp,
+            tribeId: targetBunny.tribeId,
+            level: 1,
+            ubuntuPower: targetBunny.resonance
         });
 
-        // Restore owner tracking
-        s.humanIndexToOwner[humanId] = msg.sender;
-        s.ownerHumanCount[msg.sender]++;
-
+        s.humanIndexToOwner[newHumanId] = msg.sender;
         s.humanCount++;
 
-        emit HumanBorn(humanId, dna, _tribeId);
-    }
+        delete s.bunnyIndexToOwner[_bunnyId];
 
-    function getHumanCount() external view returns (uint256) {
-        return LibAppStorage.diamondStorage().humanCount;
-    }
-
-    function getHuman(uint256 _id) external view returns (LibAppStorage.Human memory) {
-        return LibAppStorage.diamondStorage().humans[_id];
+        emit HumanAwakened(_bunnyId, newHumanId, msg.sender);
     }
 }
