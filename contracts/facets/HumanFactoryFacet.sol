@@ -1,35 +1,42 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.20;
 
-import { LibAppStorage, AppStorage, Human } from "../libraries/LibAppStorage.sol";
+import { LibAppStorage } from "../libraries/LibAppStorage.sol";
+import { AncestralUtils } from "../libraries/AncestralUtils.sol";
 
 contract HumanFactoryFacet {
-    function mintGenesisHuman(uint256 _tribeId) external {
-        AppStorage storage ds = LibAppStorage.diamondStorage();
-        uint256 bunnyId = ds.bunnyCount;
+    event HumanBorn(uint256 indexed humanId, uint256 dna, uint256 tribeId);
 
-        ds.bunnies[bunnyId] = Human({
-            genes: uint256(keccak256(abi.encodePacked(block.timestamp, bunnyId))),
+    function mintHuman(uint256 _tribeId) external {
+        // ✅ CORRECT - Use diamondStorage()
+        LibAppStorage.AppStorage storage s = LibAppStorage.diamondStorage();
+        
+        // Add access control
+        require(msg.sender == s.allowedMinter, "Not authorized");
+
+        uint256 dna = AncestralUtils.generateGenesisGenes(_tribeId);
+        uint256 humanId = s.humanCount;
+
+        s.humans[humanId] = LibAppStorage.Human({
+            dna: dna,
             birthTime: block.timestamp,
-            tribeId: _tribeId,
-            generation: 0,
-            resonance: 100, // Genesis bonus
-            level: 1,
-            matronId: 0,
-            sireId: 0,
-            cooldownEnd: block.timestamp
+            tribeId: _tribeId
         });
 
-        ds.bunnyIndexToOwner[bunnyId] = msg.sender;
-        ds.ownerHumanCount[msg.sender]++;
-        ds.bunnyCount++;
+        // Restore owner tracking
+        s.humanIndexToOwner[humanId] = msg.sender;
+        s.ownerHumanCount[msg.sender]++;
+
+        s.humanCount++;
+
+        emit HumanBorn(humanId, dna, _tribeId);
     }
 
     function getHumanCount() external view returns (uint256) {
-        return LibAppStorage.diamondStorage().bunnyCount;
+        return LibAppStorage.diamondStorage().humanCount;
     }
 
-    function getHuman(uint256 _id) external view returns (Human memory) {
-        return LibAppStorage.diamondStorage().bunnies[_id];
+    function getHuman(uint256 _id) external view returns (LibAppStorage.Human memory) {
+        return LibAppStorage.diamondStorage().humans[_id];
     }
 }
