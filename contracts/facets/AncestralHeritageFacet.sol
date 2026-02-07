@@ -32,7 +32,12 @@ contract AncestralHeritageFacet {
     function joinTribe(uint256 _tribeId) external {
         AppStorage storage s = LibAppStorage.diamondStorage();
         require(s.tribes[_tribeId].isActive, "Tribe does not exist");
-        
+
+// THE BALANCED BRIDGE LOCK:
+        // Tribe 12 (Synthesis) requires Bit 0 (Khoe-San) foundation.
+        if (_tribeId == 12) {
+            require((s.playerBuffs[msg.sender] & (1 << 0)) != 0, "Synthesis requires Khoe-San foundation");        
+
         s.playerTribe[msg.sender] = _tribeId;
         s.playerResonance[msg.sender] = 1;
         
