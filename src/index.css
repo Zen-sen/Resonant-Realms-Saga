@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  background-color: #050505;
+  color: white;
+  overflow-x: hidden;
+}
+
+@keyframes pulse-glow {
+  0% { box-shadow: 0 0 5px rgba(236, 72, 153, 0.2); }
+  50% { box-shadow: 0 0 20px rgba(236, 72, 153, 0.4); }
+  100% { box-shadow: 0 0 5px rgba(236, 72, 153, 0.2); }
+}

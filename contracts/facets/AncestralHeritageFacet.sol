@@ -22,7 +22,7 @@ contract AncestralHeritageFacet {
         s.tribes[12].name = "Synthesis";
         s.tribes[12].isActive = true;
         
-        // Note: Indices 1-11 would be seeded here in full production.
+        // Note: Indices 1-11 are seeded via script or separate batch to save gas.
     }
 
     /**
@@ -33,10 +33,11 @@ contract AncestralHeritageFacet {
         AppStorage storage s = LibAppStorage.diamondStorage();
         require(s.tribes[_tribeId].isActive, "Tribe does not exist");
 
-// THE BALANCED BRIDGE LOCK:
+        // THE BALANCED BRIDGE LOCK:
         // Tribe 12 (Synthesis) requires Bit 0 (Khoe-San) foundation.
         if (_tribeId == 12) {
             require((s.playerBuffs[msg.sender] & (1 << 0)) != 0, "Synthesis requires Khoe-San foundation");        
+        }
 
         s.playerTribe[msg.sender] = _tribeId;
         s.playerResonance[msg.sender] = 1;
@@ -58,7 +59,7 @@ contract AncestralHeritageFacet {
         require(s.playerTribe[msg.sender] == 12, "Only Synthesis tribe can bridge");
         
         // 2. Validate the target (The Bridge reaches back to Foundation 0 through Tribe 11)
-        require(_borrowedTribeId >= 0 && _borrowedTribeId < 12, "Invalid borrow target");
+        require(_borrowedTribeId < 12, "Invalid borrow target");
 
         // 3. Bitwise Synthesis: 
         // We keep the Tribe 12 bit (1 << 12) AND add the borrowed tribe bit (1 << _borrowedTribeId)

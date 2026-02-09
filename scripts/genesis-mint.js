@@ -2,7 +2,7 @@ const hre = require("hardhat");
 
 async function main() {
   // Replace with your local Diamond address from your records
-  const diamondAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+  const diamondAddress = "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9";
   
   // We attach to the BunnyFactoryFacet (or BreedingFacet) logic via the Diamond Proxy
   const bunnyFactory = await hre.ethers.getContractAt("BreedingFacet", diamondAddress);
