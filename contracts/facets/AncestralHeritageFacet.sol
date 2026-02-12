@@ -33,6 +33,16 @@ contract AncestralHeritageFacet {
         AppStorage storage s = LibAppStorage.diamondStorage();
         require(s.tribes[_tribeId].isActive, "Tribe does not exist");
 
+        // THE GENESIS GATE:
+        // Tribe 0 (Khoe-San/Foundation) requires completion of the Antigravity Experiment.
+        // This proves the player understands the Integration Layer and has achieved ≥30% mass reduction.
+        if (_tribeId == 0) {
+            require(
+                s.experimentCompleted[msg.sender], 
+                "Khoe-San requires Genesis Experiment (30%+ lift)"
+            );
+        }
+
         // THE BALANCED BRIDGE LOCK:
         // Tribe 12 (Synthesis) requires Bit 0 (Khoe-San) foundation.
         if (_tribeId == 12) {

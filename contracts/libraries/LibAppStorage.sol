@@ -73,6 +73,20 @@ struct AppStorage {
 
     // --- Physics Engine State (The Mind Sync) ---
     mapping(uint256 => TilePhysics) bunnyPhysics; // Link physics to specific Sage/Bunny IDs
+
+    // --- Antigravity Experiment State ---
+    mapping(address => bool) experimentCompleted; // Has player completed Genesis Experiment?
+    mapping(address => ExperimentRecord) experimentData; // Full experiment record per player
+}
+
+/**
+ * @notice Experiment data structure for antigravity verification.
+ */
+struct ExperimentRecord {
+    uint256 liftPercent;    // Basis points (3000 = 30%)
+    uint256 peakVoltage;    // kV * 100 (5000 = 50kV)
+    bytes32 telemetryHash;  // Keccak256 of full telemetry JSON
+    uint256 timestamp;      // Block timestamp
 }
 
 library LibAppStorage {
