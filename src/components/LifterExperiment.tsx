@@ -152,21 +152,21 @@ export function LifterExperiment({ provider, onMintSuccess }: LifterExperimentPr
             )}
 
             {/* Main Console */}
-            <div className={`experiment-console ${showAscensionAnimation ? 'breakthrough-active' : ''}`}>
+            <div className={`experiment-console ${showAscensionAnimation ? 'breakthrough-active' : ''} ${voltage > 45000 ? 'at-high-voltage' : ''}`}>
                 <div className="breakthrough-glow" />
 
-                {/* Ion Wind Particles */}
+                {/* Ion Wind Particles (Dynamic Corona Discharge) */}
                 {isRunning && voltage > 10000 && (
                     <div className="ion-wind-container ion-wind-active">
-                        {[...Array(20)].map((_, i) => (
+                        {[...Array(Math.min(20 + Math.floor(voltage / 2000), 50))].map((_, i) => (
                             <div
                                 key={i}
                                 className="particle"
                                 style={{
                                     left: `${Math.random() * 100}%`,
-                                    '--duration': `${0.5 + Math.random() * 1}s`,
+                                    '--duration': `${0.3 + Math.random() * 1}s`,
                                     '--delay': `${Math.random() * 2}s`,
-                                    '--drift': `${(Math.random() - 0.5) * 50}px`
+                                    '--drift': `${(Math.random() - 0.5) * 80}px`
                                 } as any}
                             />
                         ))}

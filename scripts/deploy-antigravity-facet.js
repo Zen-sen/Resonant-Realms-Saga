@@ -5,7 +5,7 @@ const { ethers } = require("hardhat");
  * @description Adds AntigravityFacet to the existing Diamond Standard deployment.
  * 
  * This adds the following functions:
- * - recordExperiment(uint256, uint256, bytes32)
+ * - recordExperiment(uint256, uint256, bytes32, string)
  * - hasPassedThreshold(address)
  * - getExperimentData(address)
  * - getThreshold()

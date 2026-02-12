@@ -622,3 +622,68 @@
 .breakthrough-active .breakthrough-glow {
     opacity: 1;
 }
+
+/* Phase 6: Deep Polish - Corona & Arcs */
+.experiment-console::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(45deg, #06b6d4, transparent, #ec4899);
+    z-index: -1;
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity 0.5s;
+    filter: blur(15px);
+}
+
+.at-high-voltage.experiment-console::before {
+    opacity: 0.4;
+    animation: corona-flicker 0.2s infinite;
+}
+
+@keyframes corona-flicker {
+
+    0%,
+    100% {
+        opacity: 0.3;
+        filter: blur(15px);
+    }
+
+    50% {
+        opacity: 0.5;
+        filter: blur(20px);
+    }
+}
+
+.at-high-voltage .arc-path {
+    animation: arc-shake 0.05s infinite;
+    stroke-width: 3;
+    stroke: #fff;
+    filter: drop-shadow(0 0 8px #06b6d4);
+}
+
+@keyframes arc-shake {
+    0% {
+        transform: translate(0, 0);
+    }
+
+    25% {
+        transform: translate(-1px, 1px);
+    }
+
+    50% {
+        transform: translate(1px, -1px);
+    }
+
+    75% {
+        transform: translate(-1px, -1px);
+    }
+
+    100% {
+        transform: translate(0, 0);
+    }
+}
+
+.particle {
+    box-shadow: 0 0 5px #06b6d4;
+}

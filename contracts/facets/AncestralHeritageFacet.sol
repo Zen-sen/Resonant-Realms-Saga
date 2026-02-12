@@ -5,7 +5,8 @@ import { LibAppStorage, AppStorage } from "../libraries/LibAppStorage.sol";
 import { AncestralUtils } from "../libraries/AncestralUtils.sol";
 
 contract AncestralHeritageFacet {
-    
+    event AscensionRitualComplete(address indexed player, uint256 tribeId, uint256 timestamp);
+
     /**
      * @notice Initializes the base tribal matrix.
      * @dev Only the Architect (Contract Owner) can invoke this.
@@ -55,6 +56,8 @@ contract AncestralHeritageFacet {
         // Auto-assign the base tribal buff bit (Bitwise Shift)
         // This marks the bit at the position of the Tribe ID as 'active' (1)
         s.playerBuffs[msg.sender] = (1 << _tribeId);
+
+        emit AscensionRitualComplete(msg.sender, _tribeId, block.timestamp);
     }
 
     /**
