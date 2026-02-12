@@ -87,6 +87,7 @@ struct ExperimentRecord {
     uint256 peakVoltage;    // kV * 100 (5000 = 50kV)
     bytes32 telemetryHash;  // Keccak256 of full telemetry JSON
     uint256 timestamp;      // Block timestamp
+    string metadataURI;     // Final URI (Base64 on-chain or off-chain)
 }
 
 library LibAppStorage {

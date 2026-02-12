@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useExperiment } from '../hooks/useExperiment';
 import { TelemetryDisplay } from './TelemetryDisplay';
-import { ExperimentNFTGenerator } from '../utils/ExperimentMetadata';
+import { MetadataGenerator } from '../logic/metadata-generator';
 import { ethers } from 'ethers';
 import '../styles/experiment.css';
 
@@ -83,8 +83,8 @@ export function LifterExperiment({ provider, onMintSuccess }: LifterExperimentPr
 
         setIsMinting(true);
         try {
-            // Generate metadata
-            const metadata = ExperimentNFTGenerator.generateMetadata(
+            // Generate metadata (The Vessel)
+            const metadata = MetadataGenerator.generate(
                 history,
                 0.5, // 500g test mass
                 adversaryBuffer
@@ -96,7 +96,7 @@ export function LifterExperiment({ provider, onMintSuccess }: LifterExperimentPr
             // Step 1: Record experiment
             const antigravityFacet = new ethers.Contract(
                 DIAMOND_ADDRESS,
-                ["function recordExperiment(uint256 _liftPercent, uint256 _peakVoltage, bytes32 _telemetryHash) external"],
+                ["function recordExperiment(uint256 _liftPercent, uint256 _peakVoltage, bytes32 _telemetryHash, string calldata _metadataURI) external"],
                 signer
             );
 
@@ -107,7 +107,8 @@ export function LifterExperiment({ provider, onMintSuccess }: LifterExperimentPr
             const recordTx = await antigravityFacet.recordExperiment(
                 liftPercentBp,
                 peakVoltageCentiKv,
-                metadata.properties.telemetry_hash
+                metadata.properties.telemetry_hash,
+                MetadataGenerator.toDataURI(metadata)
             );
             await recordTx.wait();
 

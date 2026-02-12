@@ -26,7 +26,8 @@ contract AntigravityFacet {
         uint256 liftPercent,
         uint256 peakVoltage,
         bytes32 telemetryHash,
-        uint256 timestamp
+        uint256 timestamp,
+        string metadataURI
     );
 
     /**
@@ -42,7 +43,8 @@ contract AntigravityFacet {
     function recordExperiment(
         uint256 _liftPercent,
         uint256 _peakVoltage,
-        bytes32 _telemetryHash
+        bytes32 _telemetryHash,
+        string calldata _metadataURI
     ) external {
         AppStorage storage s = LibAppStorage.diamondStorage();
         
@@ -63,7 +65,8 @@ contract AntigravityFacet {
             liftPercent: _liftPercent,
             peakVoltage: _peakVoltage,
             telemetryHash: _telemetryHash,
-            timestamp: block.timestamp
+            timestamp: block.timestamp,
+            metadataURI: _metadataURI
         });
         
         emit ExperimentCompleted(
@@ -71,7 +74,8 @@ contract AntigravityFacet {
             _liftPercent,
             _peakVoltage,
             _telemetryHash,
-            block.timestamp
+            block.timestamp,
+            _metadataURI
         );
     }
 
@@ -97,7 +101,8 @@ contract AntigravityFacet {
         uint256 liftPercent,
         uint256 peakVoltage,
         bytes32 telemetryHash,
-        uint256 timestamp
+        uint256 timestamp,
+        string memory metadataURI
     ) {
         AppStorage storage s = LibAppStorage.diamondStorage();
         ExperimentRecord memory record = s.experimentData[_player];
@@ -106,7 +111,8 @@ contract AntigravityFacet {
             record.liftPercent,
             record.peakVoltage,
             record.telemetryHash,
-            record.timestamp
+            record.timestamp,
+            record.metadataURI
         );
     }
 
