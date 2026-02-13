@@ -84,7 +84,8 @@ export class MetadataGenerator {
 
     public static toBase64(metadata: ExperimentMetadata): string {
         const json = JSON.stringify(metadata);
-        return Buffer.from(json).toString('base64');
+        // Browser-safe Base64 encoding
+        return btoa(unescape(encodeURIComponent(json)));
     }
 
     public static toDataURI(metadata: ExperimentMetadata): string {
@@ -156,6 +157,7 @@ export class MetadataGenerator {
 </svg>
         `.trim();
 
-        return `data:image/svg+xml;base64,${Buffer.from(svg).toString('base64')}`;
+        // Browser-safe Base64 encoding for SVG
+        return `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(svg)))}`;
     }
 }
