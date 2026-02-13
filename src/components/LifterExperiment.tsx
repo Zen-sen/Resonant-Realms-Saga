@@ -21,12 +21,9 @@ interface LifterExperimentProps {
  * - Mint transaction integration
  */
 export function LifterExperiment({ provider, onMintSuccess }: LifterExperimentProps) {
-    const [experimentState, controls] = useExperiment(true); // Vacuum mode ON for hardest test
+    const [experimentState, controls] = useExperiment(false);
     const [isMinting, setIsMinting] = useState(false);
     const [showAscensionAnimation, setShowAscensionAnimation] = useState(false);
-
-    // Phase 6 Audio Layer
-    useExperimentAudio(experimentState.voltage, experimentState.isRunning);
 
     const {
         voltage,
@@ -35,14 +32,40 @@ export function LifterExperiment({ provider, onMintSuccess }: LifterExperimentPr
         mintUnlocked,
         failedAttempts,
         adversaryBuffer,
-        history
+        history,
+        vacuumMode
     } = experimentState;
+
+    const liftPercent = telemetry ? (telemetry.variance / (telemetry.weight + telemetry.variance)) * 100 : 0;
+
+    // Phase 8: Deep Haptic Sync
+    React.useEffect(() => {
+        if (isRunning && voltage > 10000 && 'vibrate' in navigator) {
+            // Breakthrough Pulse at 35kV (The Mirror crossing)
+            if (voltage >= 34000 && voltage <= 36000) {
+                navigator.vibrate([100, 30, 100]); // Strong double pulse
+                return;
+            }
+
+            // High Voltage Resonance (shaking effect)
+            const intensity = Math.floor((voltage / 60000) * 20);
+            if (intensity > 5) {
+                // Higher voltage = more complex vibration patterns
+                if (voltage > 45000) {
+                    navigator.vibrate([intensity, 10, intensity / 2]);
+                } else {
+                    navigator.vibrate(intensity);
+                }
+            }
+        }
+    }, [voltage, isRunning]);
 
     const {
         setVoltage,
         startExperiment,
         resetExperiment,
-        recordFailedAttempt
+        recordFailedAttempt,
+        setVacuumMode
     } = controls;
 
     // Handle voltage slider change
@@ -51,12 +74,9 @@ export function LifterExperiment({ provider, onMintSuccess }: LifterExperimentPr
         setVoltage(newVoltage);
 
         // Trigger ascension animation if crossing 30% for first time
-        if (telemetry && !showAscensionAnimation) {
-            const liftPercent = (telemetry.variance / (telemetry.weight + telemetry.variance)) * 100;
-            if (liftPercent >= 30) {
-                setShowAscensionAnimation(true);
-                playBreakthroughSound();
-            }
+        if (liftPercent >= 30 && !showAscensionAnimation) {
+            setShowAscensionAnimation(true);
+            playBreakthroughSound();
         }
     };
 
@@ -67,11 +87,8 @@ export function LifterExperiment({ provider, onMintSuccess }: LifterExperimentPr
 
     // Reset and try again
     const handleReset = () => {
-        if (isRunning && telemetry) {
-            const liftPercent = (telemetry.variance / (telemetry.weight + telemetry.variance)) * 100;
-            if (liftPercent < 30) {
-                recordFailedAttempt(); // Encode the lesson
-            }
+        if (isRunning && liftPercent < 30) {
+            recordFailedAttempt(); // Encode the lesson
         }
         resetExperiment();
         setShowAscensionAnimation(false);
@@ -91,24 +108,25 @@ export function LifterExperiment({ provider, onMintSuccess }: LifterExperimentPr
             );
 
             const signer = await provider.getSigner();
-            const DIAMOND_ADDRESS = "0x5081a39b8A5f0E35a8D959395a630b68B74Dd30f";
+            const DIAMOND_ADDRESS = "0x99bbA657f2BbC93c02D617f8bA121cB8Fc104Acf";
 
             // Step 1: Record experiment
             const antigravityFacet = new ethers.Contract(
                 DIAMOND_ADDRESS,
-                ["function recordExperiment(uint256 _liftPercent, uint256 _peakVoltage, bytes32 _telemetryHash, string calldata _metadataURI) external"],
+                ["function recordExperiment(uint256 _liftPercent, uint256 _peakVoltage, bytes32 _telemetryHash, string calldata _metadataURI, uint256 _adversaryBuffer) external"],
                 signer
             );
 
             const liftPercentBp = Math.floor(metadata.properties.max_lift_percentage * 100);
             const peakVoltageCentiKv = Math.floor(metadata.properties.peak_voltage * 100);
 
-            console.log("📡 Recording experiment...");
+            console.log("📡 Recording experiment with buffer:", adversaryBuffer);
             const recordTx = await antigravityFacet.recordExperiment(
                 liftPercentBp,
                 peakVoltageCentiKv,
                 metadata.properties.telemetry_hash,
-                MetadataGenerator.toDataURI(metadata)
+                MetadataGenerator.toDataURI(metadata),
+                adversaryBuffer
             );
             await recordTx.wait();
 
@@ -135,8 +153,11 @@ export function LifterExperiment({ provider, onMintSuccess }: LifterExperimentPr
         }
     };
 
+    // Phase 6 & 3 Audio Layer
+    useExperimentAudio(voltage, isRunning);
+
     return (
-        <div className="lifter-experiment">
+        <div className={`lifter-experiment ${liftPercent >= 35 ? 'breakthrough-whiteout' : ''}`}>
             {/* Ascension Animation Overlay */}
             {showAscensionAnimation && (
                 <div className="ascension-overlay">
@@ -147,6 +168,9 @@ export function LifterExperiment({ provider, onMintSuccess }: LifterExperimentPr
                         </div>
                         <div className="mantis-icon">ǃKAGGEN</div>
                         <div className="threshold-text">30% THRESHOLD CROSSED</div>
+                        {adversaryBuffer > 0 && (
+                            <div className="mercy-text">Ubuntu Mercy active: +{(adversaryBuffer * 0.1).toFixed(1)}% Lift</div>
+                        )}
                     </div>
                 </div>
             )}
@@ -176,6 +200,20 @@ export function LifterExperiment({ provider, onMintSuccess }: LifterExperimentPr
                 <div className="console-header">
                     <h2 className="console-title">GENESIS EXPERIMENT</h2>
                     <div className="console-subtitle">The Observer's Ritual</div>
+
+                    {/* Phase 1: Vacuum Toggle */}
+                    <div className="void-mode-toggle">
+                        <label className="switch">
+                            <input
+                                type="checkbox"
+                                checked={vacuumMode}
+                                onChange={(e) => setVacuumMode(e.target.checked)}
+                                disabled={isRunning}
+                            />
+                            <span className="slider-toggle round"></span>
+                        </label>
+                        <span className="toggle-label">{vacuumMode ? 'VOID MODE (VACUUM)' : 'ATMOS MODE'}</span>
+                    </div>
                 </div>
 
                 {/* Voltage Control Section */}
@@ -299,29 +337,57 @@ function generateArcPath(voltage: number): string {
 function useExperimentAudio(voltage: number, isRunning: boolean) {
     const audioContextRef = React.useRef<AudioContext | null>(null);
     const oscillatorRef = React.useRef<OscillatorNode | null>(null);
+    const harmonicOscRef = React.useRef<OscillatorNode | null>(null);
     const gainNodeRef = React.useRef<GainNode | null>(null);
 
     React.useEffect(() => {
+        const stopAudio = async () => {
+            // Use the Safe-Close Pattern to avoid the InvalidStateError
+            if (audioContextRef.current && audioContextRef.current.state !== 'closed') {
+                try {
+                    await audioContextRef.current.close();
+                    audioContextRef.current = null; // Reset the vessel
+                } catch (err) {
+                    // The error is silenced; the lesson is already encoded.
+                }
+            }
+        };
+
         if (isRunning && !audioContextRef.current) {
             audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
             oscillatorRef.current = audioContextRef.current.createOscillator();
+            harmonicOscRef.current = audioContextRef.current.createOscillator();
             gainNodeRef.current = audioContextRef.current.createGain();
 
             oscillatorRef.current.type = 'sawtooth';
             oscillatorRef.current.frequency.setValueAtTime(60, audioContextRef.current.currentTime);
 
+            // Phase 3: Higher Harmonic Oscillator
+            harmonicOscRef.current.type = 'sine';
+            harmonicOscRef.current.frequency.setValueAtTime(120, audioContextRef.current.currentTime);
+
             gainNodeRef.current.gain.setValueAtTime(0, audioContextRef.current.currentTime);
 
             oscillatorRef.current.connect(gainNodeRef.current);
+            harmonicOscRef.current.connect(gainNodeRef.current);
             gainNodeRef.current.connect(audioContextRef.current.destination);
 
             oscillatorRef.current.start();
+            harmonicOscRef.current.start();
         }
 
-        if (isRunning && audioContextRef.current && oscillatorRef.current && gainNodeRef.current) {
+        if (isRunning && audioContextRef.current && oscillatorRef.current && harmonicOscRef.current && gainNodeRef.current) {
             // Increase pitch slightly with voltage (60Hz to 120Hz)
             const freq = 60 + (voltage / 60000) * 60;
             oscillatorRef.current.frequency.setTargetAtTime(freq, audioContextRef.current.currentTime, 0.1);
+
+            // Phase 3: Secondary Harmonic kicks in at 35kV (Integration Layer)
+            if (voltage > 35000) {
+                const harmonicFreq = 120 + ((voltage - 35000) / 25000) * 240; // 120Hz to 360Hz
+                harmonicOscRef.current.frequency.setTargetAtTime(harmonicFreq, audioContextRef.current.currentTime, 0.1);
+            } else {
+                harmonicOscRef.current.frequency.setTargetAtTime(120, audioContextRef.current.currentTime, 0.1);
+            }
 
             // Increase volume with voltage
             const volume = (voltage / 60000) * 0.1;
@@ -329,14 +395,11 @@ function useExperimentAudio(voltage: number, isRunning: boolean) {
         }
 
         if (!isRunning && audioContextRef.current) {
-            audioContextRef.current.close();
-            audioContextRef.current = null;
+            stopAudio();
         }
 
         return () => {
-            if (audioContextRef.current) {
-                audioContextRef.current.close();
-            }
+            stopAudio();
         };
     }, [isRunning, voltage]);
 }

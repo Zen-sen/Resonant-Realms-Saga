@@ -16,6 +16,7 @@ export interface ExperimentState {
     failedAttempts: number;      // Count of attempts <30% (Lessons Encoded)
     adversaryBuffer: number;     // Accumulated learning from failures
     history: TelemetryDataPoint[];
+    vacuumMode: boolean;         // Current air density mode
 }
 
 export interface ExperimentControls {
@@ -23,9 +24,10 @@ export interface ExperimentControls {
     startExperiment: () => void;
     resetExperiment: () => void;
     recordFailedAttempt: () => void;
+    setVacuumMode: (enabled: boolean) => void;
 }
 
-export function useExperiment(vacuumMode: boolean = false): [ExperimentState, ExperimentControls] {
+export function useExperiment(initialVacuum: boolean = false): [ExperimentState, ExperimentControls] {
     const [voltage, setVoltage] = useState(0);
     const [telemetry, setTelemetry] = useState<TelemetryDataPoint | null>(null);
     const [isRunning, setIsRunning] = useState(false);
@@ -33,12 +35,12 @@ export function useExperiment(vacuumMode: boolean = false): [ExperimentState, Ex
     const [failedAttempts, setFailedAttempts] = useState(0);
     const [adversaryBuffer, setAdversaryBuffer] = useState(0);
     const [history, setHistory] = useState<TelemetryDataPoint[]>([]);
+    const [vacuumMode, setVacuumMode] = useState(initialVacuum);
 
     const workerRef = useRef<Worker | null>(null);
 
     // Initialize Web Worker on mount
     useEffect(() => {
-        // Create worker (we'll build this next)
         workerRef.current = new Worker(
             new URL('../workers/physics-worker.ts', import.meta.url),
             { type: 'module' }
@@ -53,17 +55,15 @@ export function useExperiment(vacuumMode: boolean = false): [ExperimentState, Ex
                     setTelemetry(data.telemetry);
                     setHistory(prev => [...prev, data.telemetry]);
 
+                    if (data.adversaryBuffer !== undefined) {
+                        setAdversaryBuffer(data.adversaryBuffer);
+                    }
+
                     // Check for 30% threshold
                     const liftPercent = (data.telemetry.variance / (data.telemetry.weight + data.telemetry.variance)) * 100;
                     if (liftPercent >= 30 && !mintUnlocked) {
                         setMintUnlocked(true);
-                        console.log("🔓 ASCENSION KEY UNLOCKED at", voltage / 1000, "kV");
                     }
-                    break;
-
-                case 'EXPERIMENT_COMPLETE':
-                    setIsRunning(false);
-                    console.log("✅ Experiment concluded. Total points:", data.totalPoints);
                     break;
 
                 case 'ADVERSARY_UPDATE':
@@ -75,7 +75,7 @@ export function useExperiment(vacuumMode: boolean = false): [ExperimentState, Ex
         return () => {
             workerRef.current?.terminate();
         };
-    }, [mintUnlocked, voltage]);
+    }, [mintUnlocked]); // Removed voltage to prevent recreation on every slider move
 
     // Send voltage updates to worker
     useEffect(() => {
@@ -111,9 +111,8 @@ export function useExperiment(vacuumMode: boolean = false): [ExperimentState, Ex
 
     const recordFailedAttempt = useCallback(() => {
         setFailedAttempts(prev => prev + 1);
-        setAdversaryBuffer(prev => prev + 5); // Each failure adds to the Mirror
-        console.log("📚 Lesson Encoded. Failed attempts:", failedAttempts + 1);
-    }, [failedAttempts]);
+        setAdversaryBuffer(prev => prev + 5);
+    }, []);
 
     const state: ExperimentState = {
         voltage,
@@ -122,14 +121,16 @@ export function useExperiment(vacuumMode: boolean = false): [ExperimentState, Ex
         mintUnlocked,
         failedAttempts,
         adversaryBuffer,
-        history
+        history,
+        vacuumMode
     };
 
     const controls: ExperimentControls = {
         setVoltage,
         startExperiment,
         resetExperiment,
-        recordFailedAttempt
+        recordFailedAttempt,
+        setVacuumMode
     };
 
     return [state, controls];

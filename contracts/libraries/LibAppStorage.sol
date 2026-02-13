@@ -88,6 +88,7 @@ struct ExperimentRecord {
     bytes32 telemetryHash;  // Keccak256 of full telemetry JSON
     uint256 timestamp;      // Block timestamp
     string metadataURI;     // Final URI (Base64 on-chain or off-chain)
+    uint256 adversaryBuffer; // Phase 1: Ubuntu Mercy - Lessons encoded
 }
 
 library LibAppStorage {

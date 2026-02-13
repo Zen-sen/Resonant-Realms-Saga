@@ -89,9 +89,20 @@ export function calculateEffectiveWeight(mass: number, fieldParams: LocalFieldPa
     const effectiveG = calculateEffectiveG(fieldParams);
 
     // g_eff = G_eff * M / r^2
-    const effectiveGravity = (effectiveG * EarthMass) / Math.pow(EarthRadius, 2);
+    let effectiveGravity = (effectiveG * EarthMass) / Math.pow(EarthRadius, 2);
 
-    return mass * effectiveGravity;
+    // --- Phase 1: Quantum Fluctuations ---
+    // If field intensity is high (> 1.1 MV/m, corresponding to ~55kV at 5cm), 
+    // inject non-linear "jitter" and scaling.
+    if (fieldParams.electricFieldIntensity > 1.1e6) {
+        const excess = (fieldParams.electricFieldIntensity - 1.1e6) / 1e5; // Intensity above threshold
+        const jitter = (Math.random() - 0.5) * 0.05 * excess; // Random noise
+        const nonLinearScaling = 1 + (Math.pow(excess, 1.5) * 0.02); // Acceleration of leakage
+
+        effectiveGravity *= (1 - (0.05 * excess * nonLinearScaling) + jitter);
+    }
+
+    return mass * Math.max(0, effectiveGravity);
 }
 
 /**

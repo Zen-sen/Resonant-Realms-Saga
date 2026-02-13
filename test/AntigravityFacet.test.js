@@ -15,21 +15,30 @@ describe("AntigravityFacet", function () {
     before(async function () {
         [owner, player1, player2] = await ethers.getSigners();
 
-        // Note: This assumes Diamond is already deployed. 
-        // For full integration test, we'd deploy the entire Diamond here.
-        console.log("   ⚠️ Note: Integration test requires full Diamond deployment");
-        console.log("   This test validates function logic only.");
+        const AntigravityFacet = await ethers.getContractFactory("AntigravityFacet");
+        antigravityFacet = await AntigravityFacet.deploy();
+
+        console.log("   ✅ AntigravityFacet deployed for testing");
     });
 
     describe("Experiment Recording", function () {
-        it("Should reject experiments below 30% threshold", async function () {
-            // Mock contract for testing
-            const AntigravityFacet = await ethers.getContractFactory("AntigravityFacet");
-            const facet = await AntigravityFacet.deploy();
+        it("Should measure gas for recording a standard experiment", async function () {
+            const liftPercent = 3500; // 35%
+            const peakVoltage = 5000; // 50kV
+            const telemetryHash = ethers.keccak256(ethers.toUtf8Bytes("test-telemetry"));
+            const metadataURI = "data:application/json;base64," + "A".repeat(100);
+            const buffer = 5;
 
-            // This would normally be called via Diamond, but we test facet directly
-            // In production, this would revert due to Diamond storage context
-            console.log("   ✅ Function deployment successful");
+            const tx = await antigravityFacet.recordExperiment(
+                liftPercent,
+                peakVoltage,
+                telemetryHash,
+                metadataURI,
+                buffer
+            );
+
+            const receipt = await tx.wait();
+            console.log(`   ✅ Gas used: ${receipt.gasUsed.toString()}`);
         });
 
         it("Should accept experiments at ≥30% threshold", function () {

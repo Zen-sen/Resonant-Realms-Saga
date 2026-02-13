@@ -27,6 +27,7 @@ contract BunnyFactoryFacet {
             cooldownEnd: 0
         });
 
+        ds.bunnyIndexToOwner[newId] = msg.sender;
         ds.bunnyCount++;
         emit SageBreathed(newId, _tribeId, _genes);
     }

@@ -20,6 +20,7 @@ let SAFETY: SafetyProtocol | null = null;
 let SYNTHESIS: SynthesisCheck | null = null;
 let currentVoltage = 0;
 let vacuumMode = false;
+let adversaryBuffer = 5; // Phase 1: Ubuntu Mercy - Pre-seeded with 1 legacy lesson (5 pts)
 
 // Initialize when worker starts
 function initialize(isVacuum: boolean) {
@@ -28,6 +29,7 @@ function initialize(isVacuum: boolean) {
     SYNTHESIS = new SynthesisCheck(IntegrationLayerType.SIMULATED_FRAMEWORK);
     vacuumMode = isVacuum;
     currentVoltage = 0;
+    // Note: adversaryBuffer persists across resets to enable "Mercy"
 }
 
 // Calculate physics for current voltage
@@ -38,15 +40,21 @@ function calculateStep(voltage: number): void {
 
     // Dimensional leakage (gravity modification)
     let leakage = 0;
+
+    // --- Phase 1: Ubuntu Mercy ---
+    // Every lesson encoded (buffer) reduces the gravity constant slightly, 
+    // making it easier to achieve lift. 0.1% boost per buffer point.
+    const mercyFactor = 1 + (adversaryBuffer * 0.001);
+
     if (voltage > 35000) {
         // The 35kV "Breakthrough Point" - Integration Layer activation
-        leakage = ((voltage - 35000) / 25000) * 0.40;
+        leakage = ((voltage - 35000) / 25000) * 0.40 * mercyFactor;
     }
 
     const fieldParams = {
         electricFieldIntensity: eField,
         permittivity: 8.854e-12,
-        dimensionalLeakage: leakage
+        dimensionalLeakage: Math.min(0.99, leakage) // Cap leakage
     };
 
     // Calculate forces
@@ -68,26 +76,22 @@ function calculateStep(voltage: number): void {
     // Synthesis check
     const synthesis = SYNTHESIS.checkIntegration(logEntry, safetyStatus, ionThrust);
 
+    // Sync buffer from synthesis
+    const match = synthesis.message.match(/Buffer: (\d+)/);
+    if (match) {
+        adversaryBuffer = parseInt(match[1]);
+    }
+
     // Send update to main thread
     self.postMessage({
         type: 'TELEMETRY_UPDATE',
         data: {
             telemetry: logEntry,
             safetyStatus,
-            synthesis: synthesis.message
+            synthesis: synthesis.message,
+            adversaryBuffer // Explicitly pass it back
         }
     });
-
-    // Check for adversary buffer updates
-    if (synthesis.message.includes('Buffer')) {
-        const match = synthesis.message.match(/Buffer: (\d+)/);
-        if (match) {
-            self.postMessage({
-                type: 'ADVERSARY_UPDATE',
-                data: { buffer: parseInt(match[1]) }
-            });
-        }
-    }
 }
 
 // Listen for messages from main thread

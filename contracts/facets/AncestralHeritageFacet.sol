@@ -1,11 +1,36 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.20;
 
-import { LibAppStorage, AppStorage } from "../libraries/LibAppStorage.sol";
+import { LibAppStorage, AppStorage, Tribe } from "../libraries/LibAppStorage.sol";
 import { AncestralUtils } from "../libraries/AncestralUtils.sol";
 
 contract AncestralHeritageFacet {
     event AscensionRitualComplete(address indexed player, uint256 tribeId, uint256 timestamp);
+
+    /**
+     * @notice Allows the Architect to configure tribal physics.
+     * @param _id Tribe ID (0-12).
+     * @param _name Tribe name.
+     * @param _mass Gravity influence (-100 to 200).
+     * @param _buoyancy Lift influence.
+     */
+    function setTribe(
+        uint256 _id,
+        string calldata _name,
+        int256 _mass,
+        int256 _buoyancy
+    ) external {
+        AppStorage storage s = LibAppStorage.diamondStorage();
+        require(msg.sender == s.contractOwner, "Architect: Unauthorized");
+        require(_id < 13, "Invalid tribe ID");
+
+        Tribe storage t = s.tribes[_id];
+        t.name = _name;
+        t.mass = _mass;
+        t.buoyancy = _buoyancy;
+        t.isActive = true;
+        t.tribeId = _id;
+    }
 
     /**
      * @notice Initializes the base tribal matrix.
@@ -18,12 +43,16 @@ contract AncestralHeritageFacet {
         // Index 0: The Foundation (Khoe-San)
         s.tribes[0].name = "Khoe-San";
         s.tribes[0].isActive = true;
+        s.tribes[0].mass = 150; // Heavy roots
+        s.tribes[0].tribeId = 0;
 
         // Index 12: The Synthesis (Coloured Tribe / Integration Layer)
         s.tribes[12].name = "Synthesis";
         s.tribes[12].isActive = true;
+        s.tribes[12].buoyancy = 50; // Lightweight bridge
+        s.tribes[12].tribeId = 12;
         
-        // Note: Indices 1-11 are seeded via script or separate batch to save gas.
+        // Note: Indices 1-11 are seeded via setTribe to save logic gas.
     }
 
     /**

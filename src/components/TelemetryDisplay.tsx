@@ -160,14 +160,20 @@ export function TelemetryDisplay({
 
 /**
  * Generates SVG path for "Heartbeat" waveform based on E-field and lift.
+ * Phase 6: Added "Viscosity" Jitter at high voltages.
  */
 function generateHeartbeatPath(eFieldKv: number, liftPercent: number): string {
     const amplitude = Math.min(eFieldKv / 60 * 25, 25); // Scale to max 25px
     const frequency = 1 + (liftPercent / 10); // More lift = faster oscillation
 
+    // Phase 6: Viscosity Jitter (Breakthrough Instability)
+    const jitter = eFieldKv > 35 ? (Math.random() - 0.5) * (eFieldKv - 35) * 0.2 : 0;
+
     let path = 'M 0 30';
     for (let x = 0; x <= 200; x += 2) {
-        const y = 30 + amplitude * Math.sin(x / 10 * frequency);
+        // Apply jitter to each node for a "shaking" effect
+        const localJitter = jitter * Math.sin(x + Date.now() / 100);
+        const y = 30 + (amplitude + localJitter) * Math.sin(x / 10 * frequency);
         path += ` L ${x} ${y}`;
     }
 
