@@ -1,5 +1,6 @@
-// SPDX-License-Identifier: MIT
 pragma solidity 0.8.20;
+
+import { AncestralUtils } from "../libraries/AncestralUtils.sol";
 
 library GravityConstants {
     // Mass: How hard the "Old World" pulls on the tile (100 is standard)
@@ -14,6 +15,16 @@ library GravityConstants {
         if (tribeId == 0) { 
             // Khoe-San: The heavy, grounding foundation
             return PhysicsProfile(150, 0); 
+        }
+        if (tribeId == 1) {
+            // Zulu: Lightning Mass
+            AncestralUtils.PhysicsProfile memory profile = AncestralUtils.zuluConstants();
+            return PhysicsProfile(profile.mass, profile.buoyancy);
+        }
+        if (tribeId == 2) {
+            // Xhosa: Resonance Buoyancy
+            AncestralUtils.PhysicsProfile memory profile = AncestralUtils.xhosaConstants();
+            return PhysicsProfile(profile.mass, profile.buoyancy);
         }
         if (tribeId == 12) { 
             // Coloured Tribe: The buoyant Synthesis Bridge

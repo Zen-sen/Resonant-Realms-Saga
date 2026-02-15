@@ -2,6 +2,25 @@
 pragma solidity 0.8.20;
 
 library AncestralUtils {
+    struct PhysicsProfile {
+        int256 mass;
+        int256 buoyancy;
+    }
+
+    /**
+     * @notice Zulu (1): Lightning Mass - High stability, resists high-voltage jitter.
+     */
+    function zuluConstants() internal pure returns (PhysicsProfile memory) {
+        return PhysicsProfile(120, 10);
+    }
+
+    /**
+     * @notice Xhosa (2): Resonance Buoyancy - Increased lift efficiency in lower kV.
+     */
+    function xhosaConstants() internal pure returns (PhysicsProfile memory) {
+        return PhysicsProfile(90, 40);
+    }
+
     /**
      * @notice Uses bitwise AND to check if a specific tribe's buff is active in the mask.
      */
@@ -10,11 +29,27 @@ library AncestralUtils {
     }
 
     /**
-     * @notice Performs a genetic crossover (Bitwise manipulation).
+     * @notice Performs a genetic crossover (Bitwise manipulation) for Gen-2 descendants.
+     * @dev DNA synthesis is filtered through the adversaryBuffer (Phase 9 Convergence).
      */
-    function crossover(uint256 _g1, uint256 _g2, uint256 _seed) internal pure returns (uint256) {
+    function crossover(
+        uint256 _g1, 
+        uint256 _g2, 
+        uint256 _seed, 
+        uint256 _adversaryBuffer
+    ) internal pure returns (uint256) {
         uint256 mask = 0xFFFFFFFF00000000FFFFFFFF00000000FFFFFFFF00000000FFFFFFFF0000;
         uint256 mixed = (_g1 & mask) | (_g2 & ~mask);
-        return mixed ^ uint256(keccak256(abi.encodePacked(_seed)));
+        // Synthesis filtered through adversaryBuffer
+        uint256 noise = uint256(keccak256(abi.encodePacked(_seed, _adversaryBuffer)));
+        return mixed ^ (noise & 0x0000FFFF0000FFFF0000FFFF0000FFFF);
+    }
+
+    /**
+     * @notice Legacy Lesson Buffer: Failure encoded as ancestral wisdom.
+     * @dev Formula: UP = (ForgeFailure * MindJitter) / 13
+     */
+    function calculateAncestralWisdom(uint256 _forgeFailure, uint256 _mindJitter) internal pure returns (uint256) {
+        return (_forgeFailure * _mindJitter) / 13;
     }
 }

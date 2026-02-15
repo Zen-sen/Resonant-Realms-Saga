@@ -2,6 +2,7 @@
 pragma solidity 0.8.20;
 
 import { LibAppStorage, AppStorage, Bunny } from "../libraries/LibAppStorage.sol";
+import { AncestralUtils } from "../libraries/AncestralUtils.sol";
 
 contract BreedingFacet {
     /**
@@ -20,8 +21,12 @@ contract BreedingFacet {
         Bunny storage matron = ds.bunnies[_matronId];
         Bunny storage sire = ds.bunnies[_sireId];
 
-        uint256 childGenes = (matron.genes & 0xFFFFFFFF00000000) | (sire.genes & 0x00000000FFFFFFFF);
-        childGenes ^= uint256(keccak256(abi.encodePacked(block.timestamp, ds.bunnyCount)));
+        uint256 childGenes = AncestralUtils.crossover(
+            matron.genes, 
+            sire.genes, 
+            uint256(keccak256(abi.encodePacked(block.timestamp, ds.bunnyCount))),
+            ds.experimentData[msg.sender].adversaryBuffer
+        );
 
         // Resilience Buff from Ubuntu Mercy
         uint256 resilience = ds.experimentData[msg.sender].adversaryBuffer / 5;
