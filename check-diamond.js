@@ -1,9 +1,9 @@
 const { ethers } = require("hardhat");
 
 async function main() {
-  const address = "0xB7f8BC63BbcaD18155201308C8f3540b07f84F5e";
+  const address = "0xB7f8BC676941091ca24E1955367639537f225D00";
   console.log("Checking the Pulse of Diamond at:", address);
-  
+
   try {
     const code = await ethers.provider.getCode(address);
     if (code === "0x" || code === "0x0") {

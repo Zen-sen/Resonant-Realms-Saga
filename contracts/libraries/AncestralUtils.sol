@@ -11,14 +11,14 @@ library AncestralUtils {
      * @notice Zulu (1): Lightning Mass - High stability, resists high-voltage jitter.
      */
     function zuluConstants() internal pure returns (PhysicsProfile memory) {
-        return PhysicsProfile(120, 10);
+        return PhysicsProfile(180, 20);
     }
 
     /**
      * @notice Xhosa (2): Resonance Buoyancy - Increased lift efficiency in lower kV.
      */
     function xhosaConstants() internal pure returns (PhysicsProfile memory) {
-        return PhysicsProfile(90, 40);
+        return PhysicsProfile(80, 60);
     }
 
     /**
@@ -48,8 +48,17 @@ library AncestralUtils {
     /**
      * @notice Legacy Lesson Buffer: Failure encoded as ancestral wisdom.
      * @dev Formula: UP = (ForgeFailure * MindJitter) / 13
+     *      Bounds: ForgeFailure (15-22%), MindJitter (1-65%)
      */
     function calculateAncestralWisdom(uint256 _forgeFailure, uint256 _mindJitter) internal pure returns (uint256) {
-        return (_forgeFailure * _mindJitter) / 13;
+        uint256 failure = _forgeFailure;
+        if (failure < 15) failure = 15;
+        if (failure > 22) failure = 22;
+
+        uint256 jitter = _mindJitter;
+        if (jitter < 1) jitter = 1;
+        if (jitter > 65) jitter = 65;
+
+        return (failure * jitter) / 13;
     }
 }

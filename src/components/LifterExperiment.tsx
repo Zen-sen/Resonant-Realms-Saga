@@ -108,7 +108,7 @@ export function LifterExperiment({ provider, onMintSuccess }: LifterExperimentPr
             );
 
             const signer = await provider.getSigner();
-            const DIAMOND_ADDRESS = "0x99bbA657f2BbC93c02D617f8bA121cB8Fc104Acf";
+            const DIAMOND_ADDRESS = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 
             // Step 1: Record experiment
             const antigravityFacet = new ethers.Contract(

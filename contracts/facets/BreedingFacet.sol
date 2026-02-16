@@ -21,6 +21,11 @@ contract BreedingFacet {
         Bunny storage matron = ds.bunnies[_matronId];
         Bunny storage sire = ds.bunnies[_sireId];
 
+        // --- Economic Logic: State of Flow (20% Discount) ---
+        uint256 cost = getBreedingCost();
+        require(ds.playerResonance[msg.sender] >= cost, "Breeding: Insufficient Ubuntu Points");
+        ds.playerResonance[msg.sender] -= cost;
+
         uint256 childGenes = AncestralUtils.crossover(
             matron.genes, 
             sire.genes, 
@@ -90,5 +95,20 @@ contract BreedingFacet {
             }
         }
         return result;
+    }
+
+    /**
+     * @notice Returns the cost to breed in Ubuntu Points (UP).
+     * @dev Applies 20% discount if Tribe 0 has achieved State of Flow (1000 UP).
+     */
+    function getBreedingCost() public view returns (uint256) {
+        AppStorage storage ds = LibAppStorage.diamondStorage();
+        uint256 baseCost = 1000;
+        uint256 flowThreshold = 1000;
+        
+        if (ds.tribePools[0] >= flowThreshold) {
+            return 800; // 20% discount
+        }
+        return baseCost;
     }
 }

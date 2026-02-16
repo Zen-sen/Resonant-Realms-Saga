@@ -12,22 +12,35 @@ describe("🧪 Resonant Realms: Ancestral Utils & Physics", function () {
     describe("Physics Constants", function () {
         it("Should return Zulu (1) constants correctly", async function () {
             const profile = await verification.getProfile(1);
-            expect(profile.mass).to.equal(120);
-            expect(profile.buoyancy).to.equal(10);
+            expect(profile.mass).to.equal(180);
+            expect(profile.buoyancy).to.equal(20);
         });
 
         it("Should return Xhosa (2) constants correctly", async function () {
             const profile = await verification.getProfile(2);
-            expect(profile.mass).to.equal(90);
-            expect(profile.buoyancy).to.equal(40);
+            expect(profile.mass).to.equal(80);
+            expect(profile.buoyancy).to.equal(60);
         });
     });
 
     describe("Genetic Logic (Gen-2)", function () {
-        it("Should calculate Ancestral Wisdom correctly", async function () {
-            // Formula: UP = (ForgeFailure * MindJitter) / 13
-            const wisdom = await verification.calculateAncestralWisdom(13, 2);
-            expect(wisdom).to.equal(2);
+        it("Should calculate Ancestral Wisdom and enforce bounds (Clamping)", async function () {
+            // Case 1: Within bounds
+            // (20 * 13) / 13 = 20
+            const wisdom1 = await verification.calculateAncestralWisdom(20, 13);
+            expect(wisdom1).to.equal(20);
+
+            // Case 2: Below floor bounds
+            // Forge 10 -> 15, Jitter 0 -> 1
+            // (15 * 1) / 13 = 1
+            const wisdom2 = await verification.calculateAncestralWisdom(10, 0);
+            expect(wisdom2).to.equal(1);
+
+            // Case 3: Above ceiling bounds
+            // Forge 30 -> 22, Jitter 100 -> 65
+            // (22 * 65) / 13 = 110
+            const wisdom3 = await verification.calculateAncestralWisdom(30, 100);
+            expect(wisdom3).to.equal(110);
         });
 
         it("Should incorporate adversaryBuffer in crossover", async function () {
