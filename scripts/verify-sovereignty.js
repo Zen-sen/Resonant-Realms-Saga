@@ -1,72 +1,56 @@
 const { ethers } = require("hardhat");
 
-/**
- * @title verify-sovereignty.js
- * @description Pulls experiment metadata from the Diamond and re-verifies the telemetry hash.
- * 
- * Usage: npx hardhat run scripts/verify-sovereignty.js --network <network> [playerAddress]
- */
-
 async function main() {
-    const DIAMOND_ADDRESS = ethers.getAddress("0xB7f8BC676941091ca24E1955367639537f225D00".toLowerCase());
+    console.log("🧘 Resonant Realms: Sovereignty Verification (Node.js)");
+    console.log("=".repeat(50));
 
-    // Get player address from args or signers
-    const playerAddress = process.argv[2] || (await ethers.getSigners())[0].address;
-    console.log(`\n🔍 Verifying Sovereignty for: ${playerAddress}`);
+    const DIAMOND_ADDRESS = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 
-    const antigravityFacet = await ethers.getContractAt("AntigravityFacet", DIAMOND_ADDRESS);
+    // We can use any facet to get basic info, or just the BreedingFacet for getBunny
+    const breeding = await ethers.getContractAt("BreedingFacet", DIAMOND_ADDRESS);
+    const factory = await ethers.getContractAt("BunnyFactoryFacet", DIAMOND_ADDRESS);
 
+    let total;
     try {
-        console.log("📡 Querying on-chain record...");
-        const [liftPercent, peakVoltage, telemetryHash, timestamp, metadataURI, adversaryBuffer] =
-            await antigravityFacet.getExperimentData(playerAddress);
+        total = await factory.totalSages();
+        console.log(`Connected to Diamond at: ${DIAMOND_ADDRESS}`);
+        console.log(`Total Sages manifested: ${total}`);
+    } catch (e) {
+        console.error(`❌ Error connecting to node: ${e.message}`);
+        process.exit(1);
+    }
 
-        if (timestamp == 0) {
-            console.error("❌ No experiment record found for this address.");
-            return;
+    if (total === 0n) {
+        console.log("ℹ️ No sages manifested in the Diamond yet.");
+        return;
+    }
+
+    const checkCount = total > 5n ? 5n : total;
+    console.log(`🔍 Analyzing last ${checkCount} Sage(s) for Foundation Integrity...`);
+
+    let secure = true;
+    for (let i = total - checkCount; i < total; i++) {
+        const bunny = await breeding.getBunny(i);
+        const genes = BigInt(bunny.genes);
+
+        // Khoe-San Foundation Rule: Bit 0 must be 1
+        const foundationBit = genes & 1n;
+        const status = foundationBit === 1n ? "SECURE" : "CORRUPT";
+
+        console.log(`  [ID ${i}] Genes: 0x${genes.toString(16).slice(0, 16)}... | Bit 0: ${foundationBit} | ${status}`);
+
+        if (foundationBit !== 1n) {
+            secure = false;
         }
+    }
 
-        console.log(`✅ Lift: ${(Number(liftPercent) / 100).toFixed(2)}%`);
-        console.log(`✅ Voltage: ${(Number(peakVoltage) / 100).toFixed(2)}kV`);
-        console.log(`✅ Buffer: ${adversaryBuffer} Lessons`);
-        console.log(`✅ On-chain Hash: ${telemetryHash}`);
-
-        // 1. Decode Metadata URI
-        if (!metadataURI.startsWith("data:application/json;base64,")) {
-            console.error("❌ Invalid metadata format. Expected Base64 Data URI.");
-            return;
-        }
-
-        const base64Data = metadataURI.split(",")[1];
-        const jsonString = Buffer.from(base64Data, "base64").toString("utf-8");
-        const metadata = JSON.parse(jsonString);
-
-        console.log("\n📦 Metadata Decoded:");
-        console.log(`   Name: ${metadata.name}`);
-        console.log(`   Description: ${metadata.description.substring(0, 50)}...`);
-
-        // 2. Re-calculate Telemetry Hash
-        // Note: We must stringify the telemetry exactly as the generator did.
-        const telemetryJSON = JSON.stringify(metadata.telemetry);
-        const calculatedHash = ethers.keccak256(ethers.toUtf8Bytes(telemetryJSON));
-
-        console.log(`\n🧮 Calculated Hash: ${calculatedHash}`);
-
-        // 3. Compare Result
-        if (calculatedHash === telemetryHash) {
-            console.log("\n✨ SOVEREIGN PROOF VERIFIED: Telemetry matches the on-chain record.");
-            console.log("   The vessel remains stable. Ritual integrity confirmed. 🧘‍♂️");
-        } else {
-            console.error("\n🚨 SOVEREIGN PROOF FAILURE: Telemetry hash mismatch!");
-            console.log("   Calculated hash does not match the on-chain consensus.");
-        }
-
-    } catch (error) {
-        console.error("❌ Verification failed:", error.message);
+    console.log("-".repeat(50));
+    if (secure) {
+        console.log("✅ FOUNDATION SECURE");
+    } else {
+        console.log("⚠️ SOVEREIGNTY BREACHED: Found corrupted foundation bit!");
+        process.exit(1);
     }
 }
 
-main().catch((error) => {
-    console.error(error);
-    process.exit(1);
-});
+main().catch(console.error);

@@ -42,7 +42,7 @@ library AncestralUtils {
         uint256 mixed = (_g1 & mask) | (_g2 & ~mask);
         // Synthesis filtered through adversaryBuffer
         uint256 noise = uint256(keccak256(abi.encodePacked(_seed, _adversaryBuffer)));
-        return mixed ^ (noise & 0x0000FFFF0000FFFF0000FFFF0000FFFF);
+        return mixed ^ (noise & 0x0000FFFE0000FFFE0000FFFE0000FFFE);
     }
 
     /**

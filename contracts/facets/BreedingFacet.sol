@@ -21,8 +21,8 @@ contract BreedingFacet {
         Bunny storage matron = ds.bunnies[_matronId];
         Bunny storage sire = ds.bunnies[_sireId];
 
-        // --- Economic Logic: State of Flow (20% Discount) ---
-        uint256 cost = getBreedingCost();
+        // --- Economic Logic: Foundation Aware Costing ---
+        uint256 cost = calculateBreedingCostExtended(_matronId, _sireId);
         require(ds.playerResonance[msg.sender] >= cost, "Breeding: Insufficient Ubuntu Points");
         ds.playerResonance[msg.sender] -= cost;
 
@@ -107,8 +107,31 @@ contract BreedingFacet {
         uint256 flowThreshold = 1000;
         
         if (ds.tribePools[0] >= flowThreshold) {
-            return 800; // 20% discount
+            baseCost = 800; // 20% discount if flow achieved
         }
+
+        // Rule: if (Bunny.gene[0] == 1) applyDiscount(200);
+        // We check the player's last recorded experiment or active status? 
+        // The rule says "maintain the foundation". We check if parents are foundation.
+        // We actually need the matron/sire IDs passed to this function, or check global state.
+        // Let's stick to the simplest interpretation of the rule: 
+        // Players receive a bonus for foundation-compliant lineages.
+        
         return baseCost;
+    }
+
+    /**
+     * @notice Returns the cost to breed for specific parents.
+     */
+    function calculateBreedingCostExtended(uint256 _matronId, uint256 _sireId) public view returns (uint256) {
+        AppStorage storage ds = LibAppStorage.diamondStorage();
+        uint256 cost = getBreedingCost();
+        
+        // Foundation Discount check
+        if ((ds.bunnies[_matronId].genes & 1) == 1 && (ds.bunnies[_sireId].genes & 1) == 1) {
+            if (cost > 200) cost -= 200;
+        }
+        
+        return cost;
     }
 }

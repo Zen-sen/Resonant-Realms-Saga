@@ -3,6 +3,7 @@ import { useExperiment } from '../hooks/useExperiment';
 import { TelemetryDisplay } from './TelemetryDisplay';
 import { MetadataGenerator } from '../logic/metadata-generator';
 import { ethers } from 'ethers';
+import { playFoundationSound } from '../logic/universal/sound-of-the-root';
 import '../styles/experiment.css';
 
 interface LifterExperimentProps {
@@ -24,6 +25,14 @@ export function LifterExperiment({ provider, onMintSuccess }: LifterExperimentPr
     const [experimentState, controls] = useExperiment(false);
     const [isMinting, setIsMinting] = useState(false);
     const [showAscensionAnimation, setShowAscensionAnimation] = useState(false);
+    const [selectedSageId, setSelectedSageId] = useState<number | null>(null);
+
+    // Mock Sages for the Selector
+    const MOCK_SAGES = [
+        { id: 1, name: "Scout 1", genes: 0n },
+        { id: 5, name: "Elder Sage", genes: 1n }, // Bit 0: 1 (Foundation)
+        { id: 13, name: "Unity Drone", genes: 0n }
+    ];
 
     const {
         voltage,
@@ -77,6 +86,16 @@ export function LifterExperiment({ provider, onMintSuccess }: LifterExperimentPr
         if (liftPercent >= 30 && !showAscensionAnimation) {
             setShowAscensionAnimation(true);
             playBreakthroughSound();
+        }
+    };
+
+    // Handle Sage Selection
+    const handleSageSelect = (id: number) => {
+        setSelectedSageId(id);
+        const sage = MOCK_SAGES.find(s => s.id === id);
+        if (sage && (sage.genes & 1n) === 1n) {
+            const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+            playFoundationSound(ctx);
         }
     };
 
@@ -213,6 +232,31 @@ export function LifterExperiment({ provider, onMintSuccess }: LifterExperimentPr
                             <span className="slider-toggle round"></span>
                         </label>
                         <span className="toggle-label">{vacuumMode ? 'VOID MODE (VACUUM)' : 'ATMOS MODE'}</span>
+                    </div>
+                </div>
+
+                {/* Sage Selector Integration */}
+                <div className="sage-selector-panel" style={{ marginBottom: '1.5rem', padding: '1rem', background: 'rgba(255,255,255,0.05)', borderRadius: '8px', border: '1px solid rgba(6, 182, 212, 0.2)' }}>
+                    <div style={{ fontSize: '0.7rem', color: '#9ca3af', marginBottom: '0.5rem', fontWeight: 'bold' }}>SELECT ACTIVE SAGE:</div>
+                    <div style={{ display: 'flex', gap: '0.5rem' }}>
+                        {MOCK_SAGES.map(sage => (
+                            <button
+                                key={sage.id}
+                                onClick={() => handleSageSelect(sage.id)}
+                                style={{
+                                    padding: '0.4rem 0.8rem',
+                                    fontSize: '0.75rem',
+                                    background: selectedSageId === sage.id ? '#06b6d4' : 'transparent',
+                                    color: selectedSageId === sage.id ? '#000' : '#06b6d4',
+                                    border: '1px solid #06b6d4',
+                                    borderRadius: '4px',
+                                    cursor: 'pointer',
+                                    transition: 'all 0.2s'
+                                }}
+                            >
+                                {sage.name}
+                            </button>
+                        ))}
                     </div>
                 </div>
 

@@ -21,6 +21,12 @@ describe("🧪 Resonant Realms: Ancestral Utils & Physics", function () {
             expect(profile.mass).to.equal(80);
             expect(profile.buoyancy).to.equal(60);
         });
+
+        it("Should return Sotho (3) constants correctly", async function () {
+            const profile = await verification.getProfile(3);
+            expect(profile.mass).to.equal(100);
+            expect(profile.buoyancy).to.equal(30);
+        });
     });
 
     describe("Genetic Logic (Gen-2)", function () {

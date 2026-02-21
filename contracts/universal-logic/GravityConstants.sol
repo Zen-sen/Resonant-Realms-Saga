@@ -26,6 +26,10 @@ library GravityConstants {
             AncestralUtils.PhysicsProfile memory profile = AncestralUtils.xhosaConstants();
             return PhysicsProfile(profile.mass, profile.buoyancy);
         }
+        if (tribeId == 3) {
+            // Sotho: Steadfast Bridge
+            return PhysicsProfile(100, 30);
+        }
         if (tribeId == 12) { 
             // Coloured Tribe: The buoyant Synthesis Bridge
             return PhysicsProfile(70, 80); 

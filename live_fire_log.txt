@@ -1,0 +1,12 @@
+­ƒöÑ LIVE-FIRE TEST: 0xFFFE FOUNDATION MASK
+============================================================
+­ƒæñ Practitioner: 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
+[1/5] Experiment already recorded. Proceeding with existing buffer.
+[2/5] Granting Resonance...
+ProviderError: Error: VM Exception while processing transaction: reverted with reason string 'Diamond: Function does not exist'
+    at HttpProvider.request (C:\Users\classic\Resonant-Realms-Saga\node_modules\hardhat\src\internal\core\providers\http.ts:116:21)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at HardhatEthersSigner.sendTransaction (C:\Users\classic\Resonant-Realms-Saga\node_modules\@nomicfoundation\hardhat-ethers\src\signers.ts:185:18)
+    at send (C:\Users\classic\Resonant-Realms-Saga\node_modules\ethers\src.ts\contract\contract.ts:313:20)
+    at Proxy.recordAwakening (C:\Users\classic\Resonant-Realms-Saga\node_modules\ethers\src.ts\contract\contract.ts:352:16)
+    at main (C:\Users\classic\Resonant-Realms-Saga\scripts\live-fire-test-0xfffe.js:29:12)
