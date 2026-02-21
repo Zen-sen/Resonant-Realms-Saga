@@ -1,0 +1,151 @@
+
+
+  ­ƒº¬ Resonant Realms: Ancestral Utils & Physics
+    Physics Constants
+      Ô£ö Should return Zulu (1) constants correctly
+      Ô£ö Should return Xhosa (2) constants correctly
+      Ô£ö Should return Sotho (3) constants correctly
+      Ô£ö Should return Setswana (4) constants correctly
+      Ô£ö Should return Sepedi (5) constants correctly
+      Ô£ö Should return Synthesis (12) constants correctly
+      Ô£ö Should return standard density for unknown Tribe 6
+      Ô£ö Should return standard density for unknown Tribe 7
+      Ô£ö Should return standard density for unknown Tribe 8
+      Ô£ö Should return standard density for unknown Tribe 9
+      Ô£ö Should return standard density for unknown Tribe 10
+      Ô£ö Should return standard density for unknown Tribe 11
+      Ô£ö Should return standard density for Tribe > 12
+      Ô£ö Should return Khoe-San (0) constants correctly
+    Genetic Logic (Gen-2)
+      Ô£ö Should calculate Ancestral Wisdom and enforce bounds (Clamping)
+      Ô£ö Should incorporate adversaryBuffer in crossover
+      Ô£ö Should protect Bit 0 in crossover (Test 1)
+      Ô£ö Should protect Bit 0 in crossover (Test 2)
+      Ô£ö Should noise NOT flip Bit 0 (FORCE_MASK verification)
+      Ô£ö Should handle wisdom clamping - high edge
+      Ô£ö Should handle wisdom clamping - low edge
+      Ô£ö Should verify mass is within expected range (0-200) for all known tribes
+      Ô£ö Should verify buoyancy is non-negative for all known tribes
+
+  ­ƒº¼ Resonant Realms: Human Awakening & Transcendence
+    The Great Awakening (HumanFactoryFacet)
+      Ô£ö 1. Should fail if the caller doesn't own the bunny (45ms)
+      Ô£ö 2. Should fail if resonance is below 100
+      Ô£ö 3. Should fail if Ubuntu Points are below 10,000
+      Ô£ö 4. Should fail if resonance is not 100 (44Hz) or 200 (88Hz)
+      Ô£ö 5. Should preserve Bit 0 (Khoe-San) during awakening
+      Ô£ö 6. Should XOR DNA with entropy while keeping Bit 0 intact (FORCE_MASK)
+      Ô£ö 7. Should burn the bunny ownership after awakening
+      Ô£ö 8. Should correctly report awakening path for Setswana (Tribe 4)
+      Ô£ö 9. Should correctly report awakening path for Sepedi (Tribe 5)
+      Ô£ö 10. Should allow emergency foundation repair for Tribe 0
+      Ô£ö 11. Should report default path (44/0) for unknown tribes
+      Ô£ö 12. Should verify syntactic presence of FORCE_MASK in DNA logic
+      Ô£ö 13. Should record awakenedTime as current block timestamp
+      Ô£ö 14. Should initialize level to 1
+      Ô£ö 15. Should inherit ubuntuPower from bunny resonance
+      Ô£ö 16. Should inherit tribeId from bunny
+      Ô£ö 17. Should emit HumanAwakened event
+      Ô£ö 18. Should emit EmergencyRelief event
+      Ô£ö 19. Should require exact resonance match for 44Hz path
+      Ô£ö 20. Should require exact resonance match for 88Hz path
+      Ô£ö 21. Should prevent non-owner from repairing foundation
+      Ô£ö 22. Should confirm 0 corruptions in DNA synthesis logic
+
+  AntigravityFacet
+   Ô£à AntigravityFacet deployed for testing
+    Experiment Recording
+   Ô£à Gas used: 296184
+      Ô£ö Should measure gas for recording a standard experiment
+   Ô£à Threshold logic validated: 3000 basis points = 30%
+      Ô£ö Should accept experiments at ÔëÑ30% threshold
+   Ô£à Voltage range validation: 10kV - 100kV
+      Ô£ö Should validate voltage ranges (10-100kV)
+    Telemetry Hash Generation
+   Ô£à Hash consistency verified
+      Ô£ö Should generate consistent keccak256 hashes
+    Integration Logic
+   Ô£à Gating logic: Tribe 0 requires experiment
+      Ô£ö Should enforce experiment requirement for Tribe 0
+   Ô£à Access granted after ÔëÑ30% lift achievement
+      Ô£ö Should allow Tribe 0 access after experiment
+
+  ­ƒº¬ Resonant Realms: Breeding Cost Validation
+   (Skipping isolated facet test; executing integrated logic check via restoration script)
+    Ô£ö Should verify State of Flow logic in BreedingFacet
+
+  Antigravity Gas Audit
+    1) Should measure gas for recording a standard experiment
+    2) Should measure gas for a large experiment (4KB Metadata)
+
+  ­ƒº¬ Resonant Realms: 0xFFFE Foundation Test
+   --- Setup Parent Lineage ---
+   (Experiment already recorded for this signer)
+    3) Should preserve Bit 0 (Khoe-San Foundation) during crossover even with maximum noise
+
+  ­ƒº¼ Resonant Realms: Genetic Logic
+    4) Should breathe life into a Khoe-San Genesis (Tribe 0)
+    5) Should correctly identify Synthesis Trait for Tribe 12
+
+  Resonant Realms: Heritage & Synthesis Logic
+    6) "before each" hook for "Should allow a player to join the Khoe-San (Tribe ID: 0) after experiment"
+
+
+  52 passing (3s)
+  6 failing
+
+  1) Antigravity Gas Audit
+       Should measure gas for recording a standard experiment:
+     Error: no matching fragment (operation="fragment", info={ "args": [ 3500, 5000, "0xa2e871312a06e9b45977613ef5367d9256d9fa2e6938981dac42b2702aa60982", "data:application/json;base64,AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" ], "key": "recordExperiment" }, code=UNSUPPORTED_OPERATION, version=6.16.0)
+      at makeError (node_modules\ethers\src.ts\utils\errors.ts:698:21)
+      at assert (node_modules\ethers\src.ts\utils\errors.ts:719:25)
+      at getFragment (node_modules\ethers\src.ts\contract\contract.ts:270:15)
+      at Proxy.recordExperiment (node_modules\ethers\src.ts\contract\contract.ts:350:26)
+      at Context.<anonymous> (test\legacy\GasAudit.test.js:22:43)
+
+  2) Antigravity Gas Audit
+       Should measure gas for a large experiment (4KB Metadata):
+     Error: no matching fragment (operation="fragment", info={ "args": [ 4000, 6000, "0xe51fa061e5baabff38be5ffff76ac229cb3d1c6eeb3164249d7f344c9353a7e3", "data:application/json;base64,BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB" ], "key": "recordExperiment" }, code=UNSUPPORTED_OPERATION, version=6.16.0)
+      at makeError (node_modules\ethers\src.ts\utils\errors.ts:698:21)
+      at assert (node_modules\ethers\src.ts\utils\errors.ts:719:25)
+      at getFragment (node_modules\ethers\src.ts\contract\contract.ts:270:15)
+      at Proxy.recordExperiment (node_modules\ethers\src.ts\contract\contract.ts:350:26)
+      at Context.<anonymous> (test\legacy\GasAudit.test.js:42:43)
+
+  3) ­ƒº¬ Resonant Realms: 0xFFFE Foundation Test
+       Should preserve Bit 0 (Khoe-San Foundation) during crossover even with maximum noise:
+     Error: Transaction reverted: function selector was not recognized and there's no fallback function
+    at PhysicsVerification.<unrecognized-selector> (contracts/test/PhysicsVerification.sol:11)
+    at EdrProviderWrapper.request (node_modules\hardhat\src\internal\hardhat-network\provider\provider.ts:453:41)
+    at HardhatEthersSigner.sendTransaction (node_modules\@nomicfoundation\hardhat-ethers\src\signers.ts:185:18)
+    at send (node_modules\ethers\src.ts\contract\contract.ts:313:20)
+    at Proxy.recordAwakening (node_modules\ethers\src.ts\contract\contract.ts:352:16)
+    at Context.<anonymous> (test\legacy\genetic-foundation.test.js:28:16)
+  
+
+  4) ­ƒº¼ Resonant Realms: Genetic Logic
+       Should breathe life into a Khoe-San Genesis (Tribe 0):
+     TypeError: factory.mintGenesisHuman is not a function
+      at Context.<anonymous> (test\legacy\genetic-test.js:19:30)
+      at processImmediate (node:internal/timers:491:21)
+
+  5) ­ƒº¼ Resonant Realms: Genetic Logic
+       Should correctly identify Synthesis Trait for Tribe 12:
+     TypeError: factory.getHuman is not a function
+      at Context.<anonymous> (test\legacy\genetic-test.js:31:33)
+      at processImmediate (node:internal/timers:491:21)
+
+  6) Resonant Realms: Heritage & Synthesis Logic
+       "before each" hook for "Should allow a player to join the Khoe-San (Tribe ID: 0) after experiment":
+     Error: VM Exception while processing transaction: reverted with reason string 'Architect: Unauthorized'
+    at AncestralHeritageFacet.setTribe (contracts/facets/AncestralHeritageFacet.sol:24)
+    at AncestralHeritageFacet.initializeTribalMatrix (contracts/facets/AncestralHeritageFacet.sol:39)
+    at EdrProviderWrapper.request (node_modules\hardhat\src\internal\hardhat-network\provider\provider.ts:453:41)
+    at HardhatEthersSigner.sendTransaction (node_modules\@nomicfoundation\hardhat-ethers\src\signers.ts:185:18)
+    at send (node_modules\ethers\src.ts\contract\contract.ts:313:20)
+    at Proxy.initializeTribalMatrix (node_modules\ethers\src.ts\contract\contract.ts:352:16)
+    at Context.<anonymous> (test\legacy\heritageTest.js:20:5)
+  
+
+
+

@@ -9,15 +9,17 @@ contract BunnyFactoryFacet {
     function breatheSage(uint256 _genes, uint256 _tribeId) external {
         AppStorage storage ds = LibAppStorage.diamondStorage();
 
+        uint256 finalGenes = _genes;
         if (_tribeId == 0) {
             require(ds.experimentCompleted[msg.sender], "BunnyFactory: Tribe 0 requires Genesis Experiment completion");
+            finalGenes |= 1; // Enforce Foundation Bit
         }
 
         uint256 newId = ds.bunnyCount;
 
         // Matching your 8-field Bunny struct exactly from LibAppStorage
         ds.bunnies[newId] = Bunny({
-            genes: _genes,
+            genes: finalGenes,
             birthTime: block.timestamp,
             tribeId: _tribeId,
             generation: 0,

@@ -1,0 +1,32 @@
+An unexpected error occurred:
+
+Error: Cannot find module 'C:\Users\classic\Resonant-Realms-Saga\test\genetic-foundation.test.js'
+Require stack:
+- C:\Users\classic\Resonant-Realms-Saga\node_modules\mocha\lib\mocha.js
+- C:\Users\classic\Resonant-Realms-Saga\node_modules\mocha\index.js
+- C:\Users\classic\Resonant-Realms-Saga\node_modules\hardhat\builtin-tasks\test.js
+- C:\Users\classic\Resonant-Realms-Saga\node_modules\hardhat\internal\core\tasks\builtin-tasks.js
+- C:\Users\classic\Resonant-Realms-Saga\node_modules\hardhat\internal\core\config\config-loading.js
+- C:\Users\classic\Resonant-Realms-Saga\node_modules\hardhat\internal\cli\cli.js
+- C:\Users\classic\Resonant-Realms-Saga\node_modules\hardhat\internal\cli\bootstrap.js
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at Function._load (node:internal/modules/cjs/loader:1055:27)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:220:24)
+    at Module.require (node:internal/modules/cjs/loader:1311:12)
+    at require (node:internal/modules/helpers:136:16)
+    at C:\Users\classic\Resonant-Realms-Saga\node_modules\mocha\lib\mocha.js:416:36
+    at Array.forEach (<anonymous>)
+    at Mocha.loadFiles (C:\Users\classic\Resonant-Realms-Saga\node_modules\mocha\lib\mocha.js:413:14)
+    at Mocha.run (C:\Users\classic\Resonant-Realms-Saga\node_modules\mocha\lib\mocha.js:988:10) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    'C:\\Users\\classic\\Resonant-Realms-Saga\\node_modules\\mocha\\lib\\mocha.js',
+    'C:\\Users\\classic\\Resonant-Realms-Saga\\node_modules\\mocha\\index.js',
+    'C:\\Users\\classic\\Resonant-Realms-Saga\\node_modules\\hardhat\\builtin-tasks\\test.js',
+    'C:\\Users\\classic\\Resonant-Realms-Saga\\node_modules\\hardhat\\internal\\core\\tasks\\builtin-tasks.js',
+    'C:\\Users\\classic\\Resonant-Realms-Saga\\node_modules\\hardhat\\internal\\core\\config\\config-loading.js',
+    'C:\\Users\\classic\\Resonant-Realms-Saga\\node_modules\\hardhat\\internal\\cli\\cli.js',
+    'C:\\Users\\classic\\Resonant-Realms-Saga\\node_modules\\hardhat\\internal\\cli\\bootstrap.js'
+  ]
+}

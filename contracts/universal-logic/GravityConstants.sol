@@ -38,6 +38,10 @@ library GravityConstants {
             // Sepedi: Regenerative Buoyancy (healing physics)
             return PhysicsProfile(50, 90);
         }
+        if (tribeId == 9) {
+            // isiNdebele: Symmetric Harmony
+            return PhysicsProfile(90, 50);
+        }
         if (tribeId == 12) { 
             // Coloured Tribe: The buoyant Synthesis Bridge
             return PhysicsProfile(70, 80); 

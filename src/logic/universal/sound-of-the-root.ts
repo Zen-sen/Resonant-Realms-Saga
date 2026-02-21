@@ -5,11 +5,11 @@
 
 /**
  * Plays the "Foundation Sound" (Sound of the Root) using the Web Audio API.
- * Frequency: 44Hz (Sub-bass) and 88Hz (Unity Harmonic).
  * 
  * @param ctx The AudioContext to use for playback.
+ * @param frequency The base frequency to play (default: 44Hz).
  */
-export function playFoundationSound(ctx: AudioContext) {
+export function playFoundationSound(ctx: AudioContext, frequency: number = 44) {
     if (!ctx) return;
 
     try {
@@ -17,13 +17,13 @@ export function playFoundationSound(ctx: AudioContext) {
         const osc2 = ctx.createOscillator();
         const gain = ctx.createGain();
 
-        // 44Hz - The Deep Root
+        // The Deep Root
         osc1.type = 'sine';
-        osc1.frequency.setValueAtTime(44, ctx.currentTime);
+        osc1.frequency.setValueAtTime(frequency, ctx.currentTime);
 
-        // 88Hz - The First Resonance
+        // The First Resonance (Unity Harmonic)
         osc2.type = 'sine';
-        osc2.frequency.setValueAtTime(88, ctx.currentTime);
+        osc2.frequency.setValueAtTime(frequency * 2, ctx.currentTime);
 
         // Heavy, grounding envelope
         gain.gain.setValueAtTime(0, ctx.currentTime);
@@ -39,7 +39,7 @@ export function playFoundationSound(ctx: AudioContext) {
         osc1.stop(ctx.currentTime + 1.6);
         osc2.stop(ctx.currentTime + 1.6);
 
-        console.log("🎵 Sound of the Root manifested (44Hz/88Hz)");
+        console.log(`🎵 Sound of the Root manifested (${frequency}Hz/${frequency * 2}Hz)`);
     } catch (e) {
         console.warn("Foundation Sound failed to manifest:", e);
     }

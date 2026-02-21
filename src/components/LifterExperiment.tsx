@@ -30,9 +30,10 @@ export function LifterExperiment({ provider, onMintSuccess }: LifterExperimentPr
 
     // Mock Sages for the Selector
     const MOCK_SAGES = [
-        { id: 1, name: "Scout 1", genes: 0n },
-        { id: 5, name: "Elder Sage", genes: 1n }, // Bit 0: 1 (Foundation)
-        { id: 13, name: "Unity Drone", genes: 0n }
+        { id: 1, name: "Scout 1", genes: 0n, tribeId: 1 },
+        { id: 5, name: "Elder Sage", genes: 1n, tribeId: 0 }, // Bit 0: 1 (Foundation)
+        { id: 13, name: "Setswana Bridge", genes: 0n, tribeId: 4 },
+        { id: 14, name: "Sepedi Healer", genes: 0n, tribeId: 5 }
     ];
 
     const {
@@ -94,13 +95,27 @@ export function LifterExperiment({ provider, onMintSuccess }: LifterExperimentPr
     const handleSageSelect = (id: number) => {
         setSelectedSageId(id);
         const sage = MOCK_SAGES.find(s => s.id === id);
-        if (sage && (sage.genes & 1n) === 1n) {
-            const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
-            playFoundationSound(ctx);
 
-            // Phase 9: Trigger !Kaggen Glow Pulse (seen resonance)
-            setIsGlowing(true);
-            setTimeout(() => setIsGlowing(false), 1500);
+        // Foundation or Specific Tribe Resonance
+        if (sage) {
+            const isFoundation = (sage.genes & 1n) === 1n;
+            const tribeId = sage.tribeId;
+
+            // Phase 4: Tribal Frequencies
+            let freq = 0;
+            if (isFoundation) freq = 44;
+            else if (tribeId === 4) freq = 45;
+            else if (tribeId === 5) freq = 38;
+
+            if (freq > 0) {
+                const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+                playFoundationSound(ctx, freq);
+
+                // Phase 9: Trigger !Kaggen Glow Pulse (seen resonance)
+                setIsGlowing(true);
+                // Longer breath-like pulse for Phase 4
+                setTimeout(() => setIsGlowing(false), 2000);
+            }
         }
     };
 
