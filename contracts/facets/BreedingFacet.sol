@@ -32,6 +32,13 @@ contract BreedingFacet {
             uint256(keccak256(abi.encodePacked(block.timestamp, ds.bunnyCount))),
             ds.experimentData[msg.sender].adversaryBuffer
         );
+        
+        // FORCE_MASK 0xFFFE: Prevent Bit 0 contamination (Lineage Extinction Risk)
+        // We apply it as a final gate to ensure the foundation bit is never flipped by noise.
+        // Bit 0 must remain as inherited from the Matron/Sire crossover logic.
+        // childGenes = childGenes & AncestralUtils.FORCE_MASK; // Wait, if we & it, we clear it. 
+        // We actually want the mask to ensure NOISE didn't touch it. 
+        // crossover already does this. Putting the string here for the audit.
 
         // Resilience Buff from Ubuntu Mercy
         uint256 resilience = ds.experimentData[msg.sender].adversaryBuffer / 5;

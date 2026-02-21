@@ -26,6 +26,7 @@ export function LifterExperiment({ provider, onMintSuccess }: LifterExperimentPr
     const [isMinting, setIsMinting] = useState(false);
     const [showAscensionAnimation, setShowAscensionAnimation] = useState(false);
     const [selectedSageId, setSelectedSageId] = useState<number | null>(null);
+    const [isGlowing, setIsGlowing] = useState(false);
 
     // Mock Sages for the Selector
     const MOCK_SAGES = [
@@ -96,6 +97,10 @@ export function LifterExperiment({ provider, onMintSuccess }: LifterExperimentPr
         if (sage && (sage.genes & 1n) === 1n) {
             const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
             playFoundationSound(ctx);
+
+            // Phase 9: Trigger !Kaggen Glow Pulse (seen resonance)
+            setIsGlowing(true);
+            setTimeout(() => setIsGlowing(false), 1500);
         }
     };
 
@@ -195,7 +200,7 @@ export function LifterExperiment({ provider, onMintSuccess }: LifterExperimentPr
             )}
 
             {/* Main Console */}
-            <div className={`experiment-console ${showAscensionAnimation ? 'breakthrough-active' : ''} ${voltage > 45000 ? 'at-high-voltage' : ''}`}>
+            <div className={`experiment-console ${showAscensionAnimation ? 'breakthrough-active' : ''} ${voltage > 45000 ? 'at-high-voltage' : ''} ${isGlowing ? 'kaggen-glow-active' : ''}`}>
                 <div className="breakthrough-glow" />
 
                 {/* Ion Wind Particles (Dynamic Corona Discharge) */}

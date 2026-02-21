@@ -7,6 +7,8 @@ library AncestralUtils {
         int256 buoyancy;
     }
 
+    uint256 constant FORCE_MASK = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE;
+
     /**
      * @notice Zulu (1): Lightning Mass - High stability, resists high-voltage jitter.
      */
@@ -40,9 +42,10 @@ library AncestralUtils {
     ) internal pure returns (uint256) {
         uint256 mask = 0xFFFFFFFF00000000FFFFFFFF00000000FFFFFFFF00000000FFFFFFFF0000;
         uint256 mixed = (_g1 & mask) | (_g2 & ~mask);
-        // Synthesis filtered through adversaryBuffer
+        // Synthesis filtered through adversaryBuffer and FORCE_MASK (Bit 0 protection)
         uint256 noise = uint256(keccak256(abi.encodePacked(_seed, _adversaryBuffer)));
-        return mixed ^ (noise & 0x0000FFFE0000FFFE0000FFFE0000FFFE);
+        uint256 repetitionMask = 0x0000FFFE0000FFFE0000FFFE0000FFFE;
+        return mixed ^ (noise & repetitionMask & FORCE_MASK);
     }
 
     /**

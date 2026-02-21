@@ -27,6 +27,18 @@ describe("🧪 Resonant Realms: Ancestral Utils & Physics", function () {
             expect(profile.mass).to.equal(100);
             expect(profile.buoyancy).to.equal(30);
         });
+
+        it("Should return Setswana (4) constants correctly", async function () {
+            const profile = await verification.getProfile(4);
+            expect(profile.mass).to.equal(100);
+            expect(profile.buoyancy).to.equal(30);
+        });
+
+        it("Should return Sepedi (5) constants correctly", async function () {
+            const profile = await verification.getProfile(5);
+            expect(profile.mass).to.equal(50);
+            expect(profile.buoyancy).to.equal(90);
+        });
     });
 
     describe("Genetic Logic (Gen-2)", function () {

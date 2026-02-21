@@ -830,3 +830,23 @@ input:checked+.slider-toggle:before {
         align-items: flex-start;
     }
 }
+
+/* --- Phase 9: !Kaggen Glow --- */
+.kaggen-glow-active {
+    animation: kaggen-pulse 1.5s ease-out;
+}
+
+@keyframes kaggen-pulse {
+    0% {
+        box-shadow: 0 0 0px 0px rgba(6, 182, 212, 0);
+        filter: brightness(1) saturate(1);
+    }
+    15% {
+        box-shadow: 0 0 40px 15px rgba(6, 182, 212, 0.7);
+        filter: brightness(1.8) saturate(1.5);
+    }
+    100% {
+        box-shadow: 0 0 0px 0px rgba(6, 182, 212, 0);
+        filter: brightness(1) saturate(1);
+    }
+}

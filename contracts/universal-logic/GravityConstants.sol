@@ -30,6 +30,14 @@ library GravityConstants {
             // Sotho: Steadfast Bridge
             return PhysicsProfile(100, 30);
         }
+        if (tribeId == 4) {
+            // Setswana: Follows Sotho's bridge-logic
+            return PhysicsProfile(100, 30);
+        }
+        if (tribeId == 5) {
+            // Sepedi: Regenerative Buoyancy (healing physics)
+            return PhysicsProfile(50, 90);
+        }
         if (tribeId == 12) { 
             // Coloured Tribe: The buoyant Synthesis Bridge
             return PhysicsProfile(70, 80); 
