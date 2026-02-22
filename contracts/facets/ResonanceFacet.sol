@@ -2,6 +2,7 @@
 pragma solidity 0.8.20;
 
 import { LibAppStorage, AppStorage, TilePhysics } from "../libraries/LibAppStorage.sol";
+import { AncestralUtils } from "../libraries/AncestralUtils.sol";
 
 /**
  * @title ResonanceFacet
@@ -25,7 +26,22 @@ contract ResonanceFacet {
         uint256 resonanceGain = _score / 1000;
         ds.bunnies[_bunnyId].resonance += resonanceGain;
 
+        // Ubuntu Point (UP) Economy Fueling: score / 100
+        ds.totalUbuntuPoints[msg.sender] += (_score / 100);
+
         emit ResonanceAscended(msg.sender, _bunnyId, ds.bunnies[_bunnyId].resonance);
+    }
+
+    /**
+     * @notice Ancestral Wisdom: Records a failed session to grant UP.
+     * @param _forgeFailure Failure percentage from standard physics (15-22%).
+     * @param _mindJitter Variance from mental resonance (1-65%).
+     */
+    function recordFailure(uint256 _forgeFailure, uint256 _mindJitter) external {
+        AppStorage storage ds = LibAppStorage.diamondStorage();
+        // Calculate UP using AncestralUtils (Phase 11 logic)
+        uint256 upGain = AncestralUtils.calculateAncestralWisdom(_forgeFailure, _mindJitter);
+        ds.totalUbuntuPoints[msg.sender] += upGain;
     }
 
     /**

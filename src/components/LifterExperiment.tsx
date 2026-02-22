@@ -126,9 +126,35 @@ export function LifterExperiment({ provider, onMintSuccess }: LifterExperimentPr
     };
 
     // Reset and try again
-    const handleReset = () => {
+    const handleReset = async () => {
         if (isRunning && liftPercent < 30) {
-            recordFailedAttempt(); // Encode the lesson
+            recordFailedAttempt(); // Encode the lesson locally
+
+            // Phase 11: On-Chain Ancestral Wisdom
+            if (provider) {
+                try {
+                    const signer = await provider.getSigner();
+                    const DIAMOND_ADDRESS = "0x99bbA657f2BbC93c02D617f8bA121cB8Fc104Acf";
+                    const resonanceFacet = new ethers.Contract(
+                        DIAMOND_ADDRESS,
+                        ["function recordFailure(uint256 _forgeFailure, uint256 _mindJitter) external"],
+                        signer
+                    );
+
+                    // Map experiment metrics to failure parameters (GDD v1.5.0)
+                    // Forge Failure: 15-22% (mapped from proximity to 30% threshold)
+                    const forgeFailure = 15 + Math.floor(Math.min(7, (30 - liftPercent) / 4));
+                    // Mind Jitter: 1-65% (mapped from peak voltage variance)
+                    const mindJitter = 1 + Math.floor(Math.min(64, voltage / 1000));
+
+                    console.log(`📡 Encoding Legacy Lesson: Forge ${forgeFailure}%, Jitter ${mindJitter}%`);
+                    const tx = await resonanceFacet.recordFailure(forgeFailure, mindJitter);
+                    // We don't necessarily need to wait for this to finish before allowing UI reset,
+                    // as it's a "background" reward for failure.
+                } catch (err) {
+                    console.warn("⚠️ Ancestral Wisdom sync failed:", err);
+                }
+            }
         }
         resetExperiment();
         setShowAscensionAnimation(false);
@@ -148,7 +174,7 @@ export function LifterExperiment({ provider, onMintSuccess }: LifterExperimentPr
             );
 
             const signer = await provider.getSigner();
-            const DIAMOND_ADDRESS = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+            const DIAMOND_ADDRESS = "0x99bbA657f2BbC93c02D617f8bA121cB8Fc104Acf";
 
             // Step 1: Record experiment
             const antigravityFacet = new ethers.Contract(

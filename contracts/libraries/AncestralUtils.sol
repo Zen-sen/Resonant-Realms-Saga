@@ -10,17 +10,36 @@ library AncestralUtils {
     uint256 constant FORCE_MASK = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE;
 
     /**
-     * @notice Zulu (1): Lightning Mass - High stability, resists high-voltage jitter.
+     * @notice Zulu (1): Lightning Mass - High stability (Thunder).
      */
     function zuluConstants() internal pure returns (PhysicsProfile memory) {
         return PhysicsProfile(180, 20);
     }
 
     /**
-     * @notice Xhosa (2): Resonance Buoyancy - Increased lift efficiency in lower kV.
+     * @notice Xhosa (2): Resonance Buoyancy - River flow.
      */
     function xhosaConstants() internal pure returns (PhysicsProfile memory) {
         return PhysicsProfile(80, 60);
+    }
+
+    /**
+     * @notice Xitsonga (6): Xibelani Spin - Balanced centrifugal force.
+     */
+    function xitsongaConstants() internal pure returns (PhysicsProfile memory) {
+        return PhysicsProfile(100, 50);
+    }
+
+    /**
+     * @notice Calculates the resonance cascade bonus for Tribe 6 (Xitsonga).
+     * @dev 5+ circular matches trigger a +25% bonus.
+     */
+    function calculateResonanceCascade(uint256 _matches, uint256 _duration) internal pure returns (uint256) {
+        if (_matches < 5) return 0;
+        
+        // Base resonance simulation: matches * 10 + duration / 2
+        uint256 baseRes = (_matches * 10) + (_duration / 2);
+        return (baseRes * 25) / 100; // 25% Bonus
     }
 
     /**

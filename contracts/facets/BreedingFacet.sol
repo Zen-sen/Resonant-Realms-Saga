@@ -23,8 +23,8 @@ contract BreedingFacet {
 
         // --- Economic Logic: Foundation Aware Costing ---
         uint256 cost = calculateBreedingCostExtended(_matronId, _sireId);
-        require(ds.playerResonance[msg.sender] >= cost, "Breeding: Insufficient Ubuntu Points");
-        ds.playerResonance[msg.sender] -= cost;
+        require(ds.totalUbuntuPoints[msg.sender] >= cost, "Breeding: Insufficient Ubuntu Points");
+        ds.totalUbuntuPoints[msg.sender] -= cost;
 
         uint256 childGenes = AncestralUtils.crossover(
             matron.genes, 
@@ -43,6 +43,12 @@ contract BreedingFacet {
         // Resilience Buff from Ubuntu Mercy
         uint256 resilience = ds.experimentData[msg.sender].adversaryBuffer / 5;
         uint256 startResonance = 50 + resilience;
+
+        // --- Phase 5: Ubuntu Mercy Gen-2 Bonus ---
+        // If lineage maintains the Khoe-San foundation (Bit 0), award 500 UP for Gen-2 birth.
+        if (matron.generation == 1 && (childGenes & 1) == 1) {
+            ds.totalUbuntuPoints[msg.sender] += 500;
+        }
 
         _mintChild(msg.sender, childGenes, uint32(_matronId), uint32(_sireId), matron.generation + 1, startResonance);
 

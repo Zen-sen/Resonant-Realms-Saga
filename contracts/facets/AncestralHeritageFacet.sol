@@ -51,8 +51,54 @@ contract AncestralHeritageFacet {
         s.tribes[12].isActive = true;
         s.tribes[12].buoyancy = 50; // Lightweight bridge
         s.tribes[12].tribeId = 12;
+
+        // Index 1: Zulu (Lightning Mass)
+        AncestralUtils.PhysicsProfile memory zulu = AncestralUtils.zuluConstants();
+        s.tribes[1].name = "Zulu";
+        s.tribes[1].isActive = true;
+        s.tribes[1].mass = zulu.mass;
+        s.tribes[1].buoyancy = zulu.buoyancy;
+        s.tribes[1].tribeId = 1;
+
+        // Index 2: Xhosa (Resonance Buoyancy)
+        AncestralUtils.PhysicsProfile memory xhosa = AncestralUtils.xhosaConstants();
+        s.tribes[2].name = "Xhosa";
+        s.tribes[2].isActive = true;
+        s.tribes[2].mass = xhosa.mass;
+        s.tribes[2].buoyancy = xhosa.buoyancy;
+        s.tribes[2].tribeId = 2;
+
+        // Index 6: Xitsonga (Xibelani Spin)
+        AncestralUtils.PhysicsProfile memory xitsonga = AncestralUtils.xitsongaConstants();
+        s.tribes[6].name = "Xitsonga";
+        s.tribes[6].isActive = true;
+        s.tribes[6].mass = xitsonga.mass;
+        s.tribes[6].buoyancy = xitsonga.buoyancy;
+        s.tribes[6].tribeId = 6;
         
-        // Note: Indices 1-11 are seeded via setTribe to save logic gas.
+        // Note: Indices 3-5, 7-11 are seeded via setTribe to save logic gas.
+    }
+
+    /**
+     * @notice Records a Xibelani Resonance Cascade (5+ matches).
+     * @param _bunnyId The ID of the bunny triggered.
+     * @param _matches Number of circular matches.
+     * @param _duration Duration of the cascade.
+     */
+    function recordResonanceCascade(uint256 _bunnyId, uint256 _matches, uint256 _duration) external {
+        AppStorage storage ds = LibAppStorage.diamondStorage();
+        require(ds.bunnyIndexToOwner[_bunnyId] == msg.sender, "Auditor: Not your bunny");
+        
+        uint256 bonus = AncestralUtils.calculateResonanceCascade(_matches, _duration);
+        require(bonus > 0, "Resonance: Cascade failure");
+        
+        ds.bunnies[_bunnyId].resonance += bonus;
+        
+        // Tribal Reward: +25% UP fuel
+        uint256 upGain = (bonus * 10); // Scale UP gain to resonance gain
+        ds.totalUbuntuPoints[msg.sender] += upGain;
+
+        emit AscensionRitualComplete(msg.sender, 6, block.timestamp);
     }
 
     /**

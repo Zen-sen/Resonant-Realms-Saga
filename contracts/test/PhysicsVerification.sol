@@ -26,4 +26,8 @@ contract PhysicsVerification {
     ) public pure returns (uint256) {
         return AncestralUtils.crossover(_g1, _g2, _seed, _adversaryBuffer);
     }
+
+    function calculateResonanceCascade(uint256 _matches, uint256 _duration) public pure returns (uint256) {
+        return AncestralUtils.calculateResonanceCascade(_matches, _duration);
+    }
 }
