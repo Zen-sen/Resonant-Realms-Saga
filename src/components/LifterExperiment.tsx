@@ -106,6 +106,7 @@ export function LifterExperiment({ provider, onMintSuccess }: LifterExperimentPr
             if (isFoundation) freq = 44;
             else if (tribeId === 4) freq = 45;
             else if (tribeId === 5) freq = 38;
+            else if (tribeId === 9) freq = 52;
 
             if (freq > 0) {
                 const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
