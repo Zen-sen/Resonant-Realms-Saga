@@ -33,6 +33,18 @@ library LibDiamond {
         ds.contractOwner = _newOwner;
     }
 
+    /**
+     * @notice The Architect's Seal - Ownership Enforcement
+     * @dev Reverts if msg.sender is not the contract owner
+     * @custom:security CRITICAL - Must be called at the start of diamondCut
+     */
+    function enforceIsContractOwner() internal view {
+        require(
+            msg.sender == diamondStorage().contractOwner, 
+            "LibDiamond: Must be contract owner"
+        );
+    }
+
     function diamondCut(
         IDiamondCut.FacetCut[] memory _diamondCut,
         address _init,
