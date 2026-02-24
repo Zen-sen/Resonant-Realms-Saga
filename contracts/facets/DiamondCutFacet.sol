@@ -15,13 +15,12 @@ contract DiamondCutFacet is IDiamondCut {
         address _init,
         bytes calldata _calldata
     ) external override {
-        // Here we would normally check for ownership
-        // LibDiamond.enforceIsContractOwner(); 
-        
-        // This is a simplified version for our initial forge
-        
+        // UL-SECURE-OWNER-01: The Architect's Seal
+        // Enforces that only the contract owner can modify the Diamond Stone
+        LibDiamond.enforceIsContractOwner();
         
         for (uint256 facetIndex; facetIndex < _diamondCut.length; facetIndex++) {
+
             IDiamondCut.FacetCutAction action = _diamondCut[facetIndex].action;
             if (action == IDiamondCut.FacetCutAction.Add) {
                 addFunctions(_diamondCut[facetIndex].facetAddress, _diamondCut[facetIndex].functionSelectors);
