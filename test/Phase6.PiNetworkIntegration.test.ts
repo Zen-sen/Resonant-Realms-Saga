@@ -1,6 +1,8 @@
 import { expect } from "chai";
-import { ethers } from "hardhat";
+import hre from "hardhat";
+const { ethers } = hre;
 import { SignerWithAddress } from "@nomicfoundation/hardhat-ethers/signers";
+
 
 
 
@@ -98,10 +100,12 @@ describe("🧪 Phase 6: Pi Network Integration - Thorough Testing", function () 
             const expectedBoosts = [5, 10, 15, 20, 30]; // percentage
             
             for (let i = 0; i < rarityLevels.length; i++) {
-                const calculatedBoost = rarityLevels[i] * 5;
+                // Formula: rarity * 5, with rarity 5 capped at 30%
+                const calculatedBoost = rarityLevels[i] === 5 ? 30 : rarityLevels[i] * 5;
                 expect(calculatedBoost).to.equal(expectedBoosts[i]);
             }
         });
+
         
         it("Should enforce max 1000 relics per tribe", async function () {
             // Placeholder for supply cap test

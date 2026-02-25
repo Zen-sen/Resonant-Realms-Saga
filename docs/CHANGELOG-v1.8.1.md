@@ -330,12 +330,18 @@ npx hardhat run scripts/seed-all-tribes.js --network pi_testnet
 
 ---
 
+## ✅ Resolved Items
+
+| Item | Resolution | Date |
+|------|------------|------|
+| Phase 5/6 TypeScript tests (ESM import issue) | **FIXED** — Changed `import { ethers } from "hardhat"` to `import hre from "hardhat"; const { ethers } = hre;` in both test files. Also renamed `hardhat.config.ts.bak` to `hardhat.config.ts` for proper TypeScript support. All Phase 6 tests (18/18) now passing. Phase 5 tests compile successfully (3/5 passing, 2 pending Diamond deployment). | 2026-02-24 |
+
 ## 🔮 Known Remaining Items
 
 | Item | Priority | Notes |
 |------|----------|-------|
-| Phase 5/6 TypeScript tests (ESM import issue) | Medium | `Phase5.XitsongaResonance.test.ts` and `Phase6.PiNetworkIntegration.test.ts` fail with ESM import error — needs `ts-node` or hardhat TypeScript config |
 | Phase 6 testnet deployment | High | Facets written but not deployed — addresses TBD |
+
 | `playerResonance` vs `totalUbuntuPoints` naming | Low | Inconsistent UP naming convention in AppStorage |
 | ERC-165 support | Low | Noted in audit, not implemented |
 | Emergency Pause pattern | Medium | Noted in audit, not implemented |

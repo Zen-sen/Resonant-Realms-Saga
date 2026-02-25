@@ -1,10 +1,213 @@
 /* 
  * Experiment Console Styling
  * Glassmorphic ancestral-tech aesthetic with cyan/magenta accents
+ * 
+ * Design Tokens from UA-UI-SPEC-FINAL
+ * Resonant Realms Saga v1.8.0
  */
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* DESIGN TOKENS - CSS Custom Properties */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Color Palette */
+  --foundation-ochre: #CC7722;
+  --resonance-gold: #FFBF00;
+  --shadow-charcoal: #36454F;
+  --digital-cyan: #06b6d4;
+  --magenta-glow: #ec4899;
+  --emerald-pulse: #10b981;
+  
+  /* Synthesis Prism Gradient */
+  --synthesis-prism: linear-gradient(90deg, #FF0000, #FF7F00, #FFFF00, #00FF00, #0000FF, #4B0082, #9400D3);
+  
+  /* Typography */
+  --font-title: 'Cinzel', 'Trajan Pro', serif;
+  --font-data: 'JetBrains Mono', 'Fira Code', monospace;
+  --font-dialogue: 'Source Sans Pro', sans-serif;
+  
+  /* Resonance Frequencies */
+  --freq-default: 44;
+  --freq-combo: 88;
+  
+  /* Spacing */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-normal: 300ms ease;
+  --transition-slow: 500ms ease;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* TRIBE-SPECIFIC THEME CLASSES */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Foundation Theme (Tribe 0 - Khoe-San) */
+.tribe-theme-foundation {
+  --theme-primary: var(--foundation-ochre);
+  --theme-secondary: var(--resonance-gold);
+  --theme-accent: #8B4513;
+  --theme-bg: linear-gradient(135deg, #1a0f0a 0%, #2d1f16 100%);
+  --theme-texture: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23CC7722' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  --animation-speed: 1;
+}
+
+/* Branch Theme (Tribes 1-11) */
+.tribe-theme-branch {
+  --theme-primary: var(--digital-cyan);
+  --theme-secondary: var(--magenta-glow);
+  --theme-accent: var(--emerald-pulse);
+  --theme-bg: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 100%);
+  --theme-texture: none;
+  --animation-speed: 1;
+}
+
+/* Synthesis Theme (Tribe 12) */
+.tribe-theme-synthesis {
+  --theme-primary: #ffffff;
+  --theme-secondary: var(--synthesis-prism);
+  --theme-accent: #C0C0C0;
+  --theme-bg: linear-gradient(135deg, #1a1a1a 0%, #2d1b4e 50%, #1a1a1a 100%);
+  --theme-texture: none;
+  --animation-speed: 1.5; /* Faster for Expert Mode */
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* KYC LEVEL VISUAL CLASSES */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+.kyc-level-0 { --seal-glow: transparent; --seal-color: #6b7280; }
+.kyc-level-1 { --seal-glow: rgba(204, 119, 34, 0.4); --seal-color: #CC7722; }
+.kyc-level-2 { --seal-glow: rgba(205, 127, 50, 0.5); --seal-color: #CD7F32; }
+.kyc-level-3 { --seal-glow: rgba(255, 255, 255, 0.8); --seal-color: #E0E0E0; }
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* HUD COMPONENT UTILITY CLASSES */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Ubuntu Reservoir Pulse Animation */
+.ubuntu-pulse {
+  animation: ubuntuMercyPulse 2s ease-in-out;
+}
+
+@keyframes ubuntuMercyPulse {
+  0%, 100% { 
+    box-shadow: 0 0 10px var(--resonance-gold);
+    filter: brightness(1);
+  }
+  50% { 
+    box-shadow: 0 0 40px var(--resonance-gold), 0 0 60px var(--foundation-ochre);
+    filter: brightness(1.3);
+  }
+}
+
+/* Resonance Frequency Wave Animation */
+.resonance-wave {
+  animation: waveOscillate calc(1s / var(--freq, 44)) linear infinite;
+}
+
+@keyframes waveOscillate {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
+
+/* Architect Seal Glow */
+.seal-glow {
+  filter: drop-shadow(0 0 var(--seal-glow-intensity, 10px) var(--seal-glow, transparent));
+  animation: sealPulse 2s ease-in-out infinite;
+}
+
+@keyframes sealPulse {
+  0%, 100% { filter: drop-shadow(0 0 10px var(--seal-glow, transparent)); }
+  50% { filter: drop-shadow(0 0 20px var(--seal-glow, transparent)); }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* ANXIETY / CORRUPTION OVERLAY */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+.anxiety-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  transition: all 0.5s ease;
+}
+
+.anxiety-level-1 {
+  background: radial-gradient(ellipse at center, transparent 60%, rgba(245, 158, 11, 0.1) 100%);
+  filter: saturate(0.8);
+}
+
+.anxiety-level-2 {
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(239, 68, 68, 0.2) 100%);
+  border: 2px solid rgba(239, 68, 68, 0.3);
+  filter: saturate(0.6) contrast(1.1);
+  animation: anxietyFlicker 0.5s infinite;
+}
+
+.anxiety-level-3 {
+  background: radial-gradient(ellipse at center, transparent 20%, rgba(220, 38, 38, 0.4) 100%);
+  border: 4px solid rgba(220, 38, 38, 0.5);
+  filter: saturate(0.4) contrast(1.2) blur(1px);
+  animation: anxietyShatter 0.3s infinite;
+}
+
+@keyframes anxietyFlicker {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+@keyframes anxietyShatter {
+  0% { transform: translate(0, 0); clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+  25% { transform: translate(-2px, 1px); }
+  50% { transform: translate(2px, -1px); }
+  75% { transform: translate(-1px, -2px); }
+  100% { transform: translate(0, 0); clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* TILE PHYSICS CLASSES */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Heavy Drop (High Mass - e.g., Afrikaans Tribe 11) */
+.physics-heavy {
+  --drop-duration: 200ms;
+  --drop-easing: cubic-bezier(0.7, 0, 0.9, 0.2);
+  animation: heavyImpact 0.1s ease-out;
+}
+
+@keyframes heavyImpact {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.95); }
+  100% { transform: scale(1); }
+}
+
+/* Buoyant Float (High Buoyancy - e.g., Sepedi Tribe 5) */
+.physics-buoyant {
+  --drop-duration: 800ms;
+  --drop-easing: cubic-bezier(0.4, 0, 0.2, 1);
+  animation: buoyantFloat 3s ease-in-out infinite;
+}
+
+@keyframes buoyantFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* EXISTING STYLES (Preserved) */
+/* ═══════════════════════════════════════════════════════════════════════════ */
 
 /* Main Container */
 .lifter-experiment {
+
     min-height: 100vh;
     background: linear-gradient(135deg, #050505 0%, #0f0f1e 100%);
     display: flex;
