@@ -46,34 +46,34 @@ describe("🧪 Resonant Realms: Ancestral Utils & Physics", function () {
             expect(profile.buoyancy).to.equal(80);
         });
 
-        it("Should return standard density for unknown Tribe 6", async function () {
+        it("Should return Xitsonga (6) constants correctly", async function () {
             const profile = await verification.getProfile(6);
             expect(profile.mass).to.equal(100);
-            expect(profile.buoyancy).to.equal(10);
+            expect(profile.buoyancy).to.equal(50);
         });
 
-        it("Should return standard density for unknown Tribe 7", async function () {
+        it("Should return Swati (7) constants correctly", async function () {
             const profile = await verification.getProfile(7);
-            expect(profile.mass).to.equal(100);
-            expect(profile.buoyancy).to.equal(10);
+            expect(profile.mass).to.equal(90);
+            expect(profile.buoyancy).to.equal(40);
         });
 
-        it("Should return standard density for unknown Tribe 8", async function () {
+        it("Should return Venda (8) constants correctly", async function () {
             const profile = await verification.getProfile(8);
-            expect(profile.mass).to.equal(100);
-            expect(profile.buoyancy).to.equal(10);
+            expect(profile.mass).to.equal(120);
+            expect(profile.buoyancy).to.equal(35);
         });
 
-        it("Should return standard density for unknown Tribe 10", async function () {
+        it("Should return Tsonga (10) constants correctly", async function () {
             const profile = await verification.getProfile(10);
-            expect(profile.mass).to.equal(100);
-            expect(profile.buoyancy).to.equal(10);
+            expect(profile.mass).to.equal(85);
+            expect(profile.buoyancy).to.equal(55);
         });
 
-        it("Should return standard density for unknown Tribe 11", async function () {
+        it("Should return Afrikaans (11) constants correctly", async function () {
             const profile = await verification.getProfile(11);
-            expect(profile.mass).to.equal(100);
-            expect(profile.buoyancy).to.equal(10);
+            expect(profile.mass).to.equal(130);
+            expect(profile.buoyancy).to.equal(25);
         });
 
         it("Should return standard density for Tribe > 12", async function () {

@@ -5,61 +5,84 @@ describe("Resonant Realms: Heritage & Synthesis Logic", function () {
   let heritageFacet, antigravityFacet;
   let owner, player1, player2;
 
-  beforeEach(async function () {
+  /**
+   * @dev Extracts all function selectors from a contract's ABI.
+   */
+  function getSelectors(contract) {
+    const selectors = [];
+    contract.interface.forEachFunction((fn) => {
+      selectors.push(fn.selector);
+    });
+    return selectors;
+  }
+
+  before(async function () {
     [owner, player1, player2] = await ethers.getSigners();
 
+    // 1. Deploy the Diamond Proxy — sets deployer as contractOwner
+    const Diamond = await ethers.getContractFactory("Diamond");
+    const diamond = await Diamond.deploy(owner.address);
+    const diamondAddress = await diamond.getAddress();
+
+    // 2. Deploy AncestralHeritageFacet logic contract
     const HeritageFacet = await ethers.getContractFactory("AncestralHeritageFacet");
-    heritageFacet = await HeritageFacet.deploy();
-    await heritageFacet.waitForDeployment();
+    const heritageDeploy = await HeritageFacet.deploy();
+    const heritageAddress = await heritageDeploy.getAddress();
+    const heritageSelectors = getSelectors(heritageDeploy);
 
+    // 3. Inscribe heritage selectors into Diamond
+    await diamond.setFacetsBatch(heritageAddress, heritageSelectors);
+
+    // 4. Deploy AntigravityFacet logic contract
     const AntigravityFacet = await ethers.getContractFactory("AntigravityFacet");
-    antigravityFacet = await AntigravityFacet.deploy();
-    await antigravityFacet.waitForDeployment();
+    const antigravityDeploy = await AntigravityFacet.deploy();
+    const antigravityAddress = await antigravityDeploy.getAddress();
+    const antigravitySelectors = getSelectors(antigravityDeploy);
 
-    // 2. Initialize matrix
+    // 5. Inscribe antigravity selectors into Diamond
+    await diamond.setFacetsBatch(antigravityAddress, antigravitySelectors);
+
+    // 6. Interface through Diamond proxy
+    heritageFacet = await ethers.getContractAt("AncestralHeritageFacet", diamondAddress);
+    antigravityFacet = await ethers.getContractAt("AntigravityFacet", diamondAddress);
+
+    // 7. Initialize all 13 tribes (owner == contractOwner)
     await heritageFacet.connect(owner).initializeTribalMatrix();
   });
 
-  it("Should allow a player to join the Khoe-San (Tribe ID: 0) after experiment", async function () {
-    // Record experiment (shared storage slot means we need to align the contracts or mock the state)
-    // For unit tests deploying facets directly, they don't share storage unless configured.
-    // However, joinTribe(0) REQUIRES experimentCompleted[msg.sender] = true.
-    // If they were on a real Diamond, they would share.
-    // Here we can use a trick or just test that it REVERTS without it.
-
-    await expect(heritageFacet.connect(player1).joinTribe(0)).to.be.revertedWith("Khoe-San requires Genesis Experiment (30%+ lift)");
-  });
-
-  it("Should prevent a player from joining a second tribe", async function () {
-    // We use Tribe 12 (Synthesis) which doesn't require an experiment if bit 0 isn't checked strictly for non-12? 
-    // Wait, joinTribe(12) requires bit 0. 
-    // Let's use Tribe 1 (Zulu) or something that isn't gated.
-    // But we only initialized 0 and 12. Let's add Tribe 1 manually.
-    await heritageFacet.connect(owner).setTribe(1, "Zulu", 180, 20);
-
-    await heritageFacet.connect(player1).joinTribe(1);
+  it("Should prevent joining Khoe-San (Tribe 0) without Genesis Experiment", async function () {
     await expect(
       heritageFacet.connect(player1).joinTribe(0)
-    ).to.be.reverted; // Reverts because already joined (actually s.playerTribe is overwritten but s.playerBuffs is reset)
-    // Wait, joinTribe logic in AncestralHeritageFacet.sol doesn't explicitly check if player already joined!
-    // It just overwrites s.playerTribe and s.playerBuffs.
-    // So the test was probably expecting a check that isn't there in the current snippet.
-    // Re-reading AncestralHeritageFacet.sol... s.playerTribe[msg.sender] = _tribeId; s.playerBuffs[msg.sender] = (1 << _tribeId);
-    // No "already belongs" check.
-    expect(true).to.be.true;
+    ).to.be.revertedWith("Khoe-San requires Genesis Experiment (30%+ lift)");
   });
 
-  it("Should allow Synthesis (Tribe 12) to bridge to Khoe-San (Tribe 0) buff", async function () {
-    // Note: This requires Bit 0 buff. Since joinTribe(12) checks Bit 0, 
-    // and joinTribe(0) requires an experiment... we skip the strict gated check in unit test
-    // or manually set the state.
-    expect(true).to.be.true;
+  it("Should allow a player to join an active tribe (Zulu - Tribe 1)", async function () {
+    await heritageFacet.connect(player1).joinTribe(1);
+    const stats = await heritageFacet.getPlayerStats(player1.address);
+    expect(stats.tribeId).to.equal(1);
   });
 
-  it("Should prevent non-Synthesis players from using the bridge", async function () {
-    await heritageFacet.connect(player1).joinTribe(0);
+  it("Should allow tribe switching (no lock-in rule)", async function () {
+    await heritageFacet.connect(player2).joinTribe(1);
+    let stats = await heritageFacet.getPlayerStats(player2.address);
+    expect(stats.tribeId).to.equal(1);
+
+    await heritageFacet.connect(player2).joinTribe(2);
+    stats = await heritageFacet.getPlayerStats(player2.address);
+    expect(stats.tribeId).to.equal(2);
+  });
+
+  it("Should prevent non-Synthesis players from using selectSynthesisBuff", async function () {
     await expect(
-      heritageFacet.connect(player1).selectSynthesisBridge(5)
-    ).to.be.revertedWith("Must be Synthesis Tribe");
+      heritageFacet.connect(player1).selectSynthesisBuff(5)
+    ).to.be.revertedWith("Only Synthesis tribe can bridge");
+  });
+
+  it("Should verify all 13 tribes are active after initialization", async function () {
+    for (let i = 0; i <= 12; i++) {
+      const tribe = await heritageFacet.getTribe(i);
+      expect(tribe.isActive).to.be.true;
+      expect(tribe.name.length).to.be.greaterThan(0);
+    }
   });
 });

@@ -1,0 +1,336 @@
+/**
+ * Physics-Specific CSS Animations
+ * Resonant Realms Saga - Tribal Matrix Board
+ * 
+ * These animations support the physics duality between:
+ * - Tribe 11 (Afrikaans): Heavy, industrial, grounded
+ * - Tribe 5 (Sepedi): Buoyant, spiritual, fluid
+ * - Tribe 12 (Synthesis): 50/50 blend of both
+ */
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   CAMERA SHAKE ANIMATION
+   Used for heavy tile impacts (Tribe 11)
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+@keyframes cameraShake {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-2px, -2px); }
+  20% { transform: translate(2px, 2px); }
+  30% { transform: translate(-2px, 2px); }
+  40% { transform: translate(2px, -2px); }
+  50% { transform: translate(-1px, 1px); }
+  60% { transform: translate(1px, -1px); }
+  70% { transform: translate(-1px, -1px); }
+  80% { transform: translate(1px, 1px); }
+  90% { transform: translate(0, 0); }
+}
+
+.camera-shake {
+  animation: cameraShake 0.3s ease-in-out;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   BUBBLE PARTICLE ANIMATIONS
+   Used for buoyant tiles (Tribe 5)
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+@keyframes bubbleRise {
+  0% {
+    transform: translateY(0) translateX(0) scale(0.5);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.8;
+  }
+  50% {
+    transform: translateY(-30px) translateX(5px) scale(1);
+  }
+  90% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(-60px) translateX(-3px) scale(1.2);
+    opacity: 0;
+  }
+}
+
+.bubble-particle {
+  animation: bubbleRise 3s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   VISUAL TRAIL ANIMATIONS
+   Used for heavy tiles (Tribe 11)
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+@keyframes trailFade {
+  0% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+}
+
+.visual-trail {
+  animation: trailFade 0.4s ease-out forwards;
+  will-change: opacity, transform;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   BUOYANCY WAVE ANIMATION
+   Triggered on Match-4
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+@keyframes buoyancyWave {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+    filter: blur(10px);
+  }
+  30% {
+    opacity: 1;
+    transform: scale(1.1);
+    filter: blur(5px);
+  }
+  60% {
+    opacity: 0.8;
+    transform: scale(1);
+    filter: blur(2px);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.2);
+    filter: blur(0);
+  }
+}
+
+.buoyancy-wave-active {
+  animation: buoyancyWave 2s ease-in-out;
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   FLOATING ANIMATION
+   Used for high buoyancy tiles
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+@keyframes gentleFloat {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-3px) rotate(1deg);
+  }
+  50% {
+    transform: translateY(-5px) rotate(0deg);
+  }
+  75% {
+    transform: translateY(-3px) rotate(-1deg);
+  }
+}
+
+.floating-tile {
+  animation: gentleFloat 4s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   HEAVY IMPACT ANIMATION
+   Used when heavy tiles land
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+@keyframes heavyImpact {
+  0% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(0.95) translateY(2px);
+  }
+  50% {
+    transform: scale(1.02) translateY(-1px);
+  }
+  70% {
+    transform: scale(0.98) translateY(1px);
+  }
+  100% {
+    transform: scale(1) translateY(0);
+  }
+}
+
+.heavy-impact {
+  animation: heavyImpact 0.3s ease-out;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   PRISMATIC SHIMMER
+   Used for Tribe 12 (Synthesis)
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+@keyframes prismaticShimmer {
+  0% {
+    background-position: -200% -200%;
+    filter: hue-rotate(0deg);
+  }
+  50% {
+    background-position: 200% 200%;
+    filter: hue-rotate(30deg);
+  }
+  100% {
+    background-position: -200% -200%;
+    filter: hue-rotate(0deg);
+  }
+}
+
+.prismatic-shimmer {
+  background: linear-gradient(
+    45deg,
+    rgba(255, 0, 0, 0.1) 0%,
+    rgba(255, 127, 0, 0.1) 16%,
+    rgba(255, 255, 0, 0.1) 33%,
+    rgba(0, 255, 0, 0.1) 50%,
+    rgba(0, 0, 255, 0.1) 66%,
+    rgba(75, 0, 130, 0.1) 83%,
+    rgba(148, 0, 211, 0.1) 100%
+  );
+  background-size: 400% 400%;
+  animation: prismaticShimmer 4s ease-in-out infinite;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   KYC LEVEL 3 - STARLIGHT VOID
+   Transparent grid mode
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+@keyframes starlightPulse {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.05);
+  }
+}
+
+.starlight-void {
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 255, 255, 0.05) 0%,
+    transparent 70%
+  );
+}
+
+.starlight-particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: white;
+  border-radius: 50%;
+  animation: starlightPulse 3s ease-in-out infinite;
+  box-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   RESONANCE FREQUENCY VIBRATION
+   Grid frame vibrates at 44Hz (resting) or 88Hz (combo)
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+@keyframes resonanceVibration44 {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(0.5px, 0.5px); }
+  50% { transform: translate(-0.5px, 0.5px); }
+  75% { transform: translate(0.5px, -0.5px); }
+}
+
+@keyframes resonanceVibration88 {
+  0%, 100% { transform: translate(0, 0); }
+  12.5% { transform: translate(1px, 1px); }
+  25% { transform: translate(-1px, 1px); }
+  37.5% { transform: translate(1px, -1px); }
+  50% { transform: translate(-1px, -1px); }
+  62.5% { transform: translate(1px, 1px); }
+  75% { transform: translate(-1px, 1px); }
+  87.5% { transform: translate(1px, -1px); }
+}
+
+.resonance-44hz {
+  animation: resonanceVibration44 0.0227s linear infinite; /* ~44Hz */
+}
+
+.resonance-88hz {
+  animation: resonanceVibration88 0.0114s linear infinite; /* ~88Hz */
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   ANXIETY SPIKE EFFECTS
+   Visual corruption during anxiety events
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+@keyframes anxietyPulse {
+  0%, 100% {
+    opacity: 0.3;
+    filter: blur(2px);
+  }
+  50% {
+    opacity: 0.6;
+    filter: blur(4px);
+  }
+}
+
+.anxiety-overlay {
+  animation: anxietyPulse 1s ease-in-out infinite;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 40%,
+    rgba(236, 72, 153, 0.2) 100%
+  );
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   PERFORMANCE OPTIMIZATIONS
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* Use GPU acceleration for animated elements */
+.will-animate {
+  will-change: transform, opacity;
+  transform: translateZ(0); /* Force GPU layer */
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  .camera-shake,
+  .bubble-particle,
+  .visual-trail,
+  .buoyancy-wave-active,
+  .floating-tile,
+  .heavy-impact,
+  .prismatic-shimmer,
+  .starlight-particle,
+  .resonance-44hz,
+  .resonance-88hz,
+  .anxiety-overlay {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Contain animations to their elements */
+.physics-container {
+  contain: layout style paint;
+}
+
+/* Optimize for 60fps */
+@media (min-resolution: 2dppx) {
+  .bubble-particle,
+  .visual-trail,
+  .starlight-particle {
+    /* Simpler animations on high-DPI screens */
+    animation-duration: 2s !important;
+  }
+}

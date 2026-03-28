@@ -1,7 +1,9 @@
 import { expect } from "chai";
-import { ethers } from "hardhat";
+import hre from "hardhat";
+const { ethers } = hre;
 
 describe("🧪 Resonant Realms Phase 5: Xitsonga & Resonance Cascade", function () {
+
     let diamond;
     let heritage;
     let breeding;
@@ -15,9 +17,10 @@ describe("🧪 Resonant Realms Phase 5: Xitsonga & Resonance Cascade", function 
         [owner, player] = await ethers.getSigners();
 
         // Link to existing Diamond
-        diamond = await ethers.getContractAt("IDiamondLoupe", DIAMOND_ADDRESS);
+        diamond = await ethers.getContractAt("contracts/interfaces/IDiamondLoupe.sol:IDiamondLoupe", DIAMOND_ADDRESS);
         heritage = await ethers.getContractAt("AncestralHeritageFacet", DIAMOND_ADDRESS);
         breeding = await ethers.getContractAt("BreedingFacet", DIAMOND_ADDRESS);
+
 
         // We also need a way to check UP
         // Let's assume there's an UbuntuPointsFacet or similar

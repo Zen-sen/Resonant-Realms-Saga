@@ -1,0 +1,65 @@
+
+
+  ­ƒº¬ Resonant Realms Phase 5: Xitsonga & Resonance Cascade
+    Tribe 6: Xitsonga Physics
+      1) Should have initialized Xitsonga (Index 6) correctly
+    Resonance Cascade
+Bunny 0 might not exist, skipping detailed resonance check
+      Ô£ö Should trigger bonus for 5+ circular matches (50ms)
+      2) Should fail if matches < 5
+    Ubuntu Mercy (Breeding Bonus)
+      Ô£ö Should award 500 UP for Gen-2 foundation-compliant birth
+
+  ­ƒº¬ Phase 6: Pi Network Integration - Thorough Testing
+MockPiPayment deployed to: 0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0
+    ­ƒöÉ KYC Gating Tests
+      Ô£ö Should verify KYC Level 0 user cannot process Pi payment (67ms)
+      Ô£ö Should verify KYC Level 1+ can process payments
+    ­ƒÄ« Oracle Integrity Tests
+      Ô£ö Should reject game results with invalid scores (0)
+      Ô£ö Should verify resonance calculation matches AncestralUtils math (48ms)
+      Ô£ö Should reject duplicate result submissions
+    ­ƒÅø´©Å Relic/Tribe Synergy Tests
+      Ô£ö Should verify Coloured Tribe (Index 12) can receive relics
+      Ô£ö Should verify relic power boost calculation (5%-30%) (264ms)
+      Ô£ö Should enforce max 1000 relics per tribe
+    ­ƒÆ░ Mock Pi Payment Tests
+      Ô£ö Should process mock payment and award correct UP (67ms)
+      Ô£ö Should track processed payments correctly (84ms)
+      Ô£ö Should handle multiple payments from same user (66ms)
+    ­ƒÉ░ Genesis Breathing Test (Bunny #0 + Pi Payment)
+      Ô£ö Should verify Bunny #0 can be minted (simulated)
+      Ô£ö Should process Pi payment in same state as Bunny #0
+      Ô£ö Should verify AppStorage slot integrity after both operations
+    ­ƒöÆ Security & Access Control Tests
+      Ô£ö Should verify only owner can set KYC requirements
+      Ô£ö Should verify only oracle operator can submit game results
+      Ô£ö Should verify only owner can withdraw Pi funds
+    Ôø¢ Gas Optimization Tests
+      Ô£ö Should verify batch KYC verification is gas efficient
+      Ô£ö Should verify batch game result submission is gas efficient
+
+
+  21 passing (5s)
+  2 failing
+
+  1) ­ƒº¬ Resonant Realms Phase 5: Xitsonga & Resonance Cascade
+       Tribe 6: Xitsonga Physics
+         Should have initialized Xitsonga (Index 6) correctly:
+     Error: could not decode result data (value="0x", info={ "method": "getTribe", "signature": "getTribe(uint256)" }, code=BAD_DATA, version=6.16.0)
+      at makeError (node_modules\ethers\src.ts\utils\errors.ts:698:21)
+      at assert (node_modules\ethers\src.ts\utils\errors.ts:719:25)
+      at Interface.decodeFunctionResult (node_modules\ethers\src.ts\abi\interface.ts:916:15)
+      at staticCallResult (node_modules\ethers\src.ts\contract\contract.ts:346:35)
+      at async staticCall (node_modules\ethers\src.ts\contract\contract.ts:303:24)
+      at async Proxy.getTribe (node_modules\ethers\src.ts\contract\contract.ts:351:41)
+      at async Context.<anonymous> (file:///C:/Users/classic/Resonant-Realms-Saga/test/Phase5.XitsongaResonance.test.ts:31:27)
+
+  2) ­ƒº¬ Resonant Realms Phase 5: Xitsonga & Resonance Cascade
+       Resonance Cascade
+         Should fail if matches < 5:
+     AssertionError: Expected transaction to be reverted with reason 'Resonance: Cascade failure', but it didn't revert
+      at async Context.<anonymous> (file:///C:/Users/classic/Resonant-Realms-Saga/test/Phase5.XitsongaResonance.test.ts:57:13)
+
+
+

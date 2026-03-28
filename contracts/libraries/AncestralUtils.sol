@@ -9,18 +9,43 @@ library AncestralUtils {
 
     uint256 constant FORCE_MASK = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE;
 
+    // ═══════════════════════════════════════════════════════
+    //  TRIBAL PHYSICS PROFILES (0-12)
+    // ═══════════════════════════════════════════════════════
+
     /**
-     * @notice Zulu (1): Lightning Mass - High stability (Thunder).
+     * @notice Zulu (1): Lightning Mass - High stability, Thunder's weight.
      */
     function zuluConstants() internal pure returns (PhysicsProfile memory) {
         return PhysicsProfile(180, 20);
     }
 
     /**
-     * @notice Xhosa (2): Resonance Buoyancy - River flow.
+     * @notice Xhosa (2): Resonance Buoyancy - River flow, ancestral current.
      */
     function xhosaConstants() internal pure returns (PhysicsProfile memory) {
         return PhysicsProfile(80, 60);
+    }
+
+    /**
+     * @notice Sotho (3): Steadfast Bridge - Mountain endurance, balanced stance.
+     */
+    function sothoConstants() internal pure returns (PhysicsProfile memory) {
+        return PhysicsProfile(100, 30);
+    }
+
+    /**
+     * @notice Setswana (4): Diplomatic Balance - Rain-caller's equilibrium.
+     */
+    function setswanaConstants() internal pure returns (PhysicsProfile memory) {
+        return PhysicsProfile(100, 30);
+    }
+
+    /**
+     * @notice Sepedi (5): Regenerative Healer - Light mass, high buoyancy.
+     */
+    function sepediConstants() internal pure returns (PhysicsProfile memory) {
+        return PhysicsProfile(50, 90);
     }
 
     /**
@@ -29,6 +54,45 @@ library AncestralUtils {
     function xitsongaConstants() internal pure returns (PhysicsProfile memory) {
         return PhysicsProfile(100, 50);
     }
+
+    /**
+     * @notice Swati (7): Ceremonial Dancer - Reed dance agility, moderate lift.
+     */
+    function swatiConstants() internal pure returns (PhysicsProfile memory) {
+        return PhysicsProfile(90, 40);
+    }
+
+    /**
+     * @notice Venda (8): Mystic Anchor - Lake of Fundudzi depth, grounded mystic.
+     */
+    function vendaConstants() internal pure returns (PhysicsProfile memory) {
+        return PhysicsProfile(120, 35);
+    }
+
+    /**
+     * @notice isiNdebele (9): Symmetric Harmony - Geometric precision, balanced forces.
+     */
+    function ndebeleConstants() internal pure returns (PhysicsProfile memory) {
+        return PhysicsProfile(90, 50);
+    }
+
+    /**
+     * @notice Tsonga (10): Coastal Drift - Ocean influence, moderate buoyancy.
+     */
+    function tsongaConstants() internal pure returns (PhysicsProfile memory) {
+        return PhysicsProfile(85, 55);
+    }
+
+    /**
+     * @notice Afrikaans (11): Frontier Forge - Settler resilience, heavy build.
+     */
+    function afrikaansConstants() internal pure returns (PhysicsProfile memory) {
+        return PhysicsProfile(130, 25);
+    }
+
+    // ═══════════════════════════════════════════════════════
+    //  RESONANCE & GENETIC LOGIC
+    // ═══════════════════════════════════════════════════════
 
     /**
      * @notice Calculates the resonance cascade bonus for Tribe 6 (Xitsonga).

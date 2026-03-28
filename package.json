@@ -13,6 +13,7 @@
     "ajv": "^8.17.1",
     "dotenv": "^17.2.4",
     "ethers": "^6.16.0",
+    "framer-motion": "^12.34.3",
     "lucide-react": "^0.300.0",
     "matter-js": "^0.20.0",
     "react": "^18.2.0",
