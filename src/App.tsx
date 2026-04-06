@@ -6,6 +6,7 @@ import { UbuntuReservoir } from './components/hud/UbuntuReservoir';
 import { ResonanceFrequency } from './components/hud/ResonanceFrequency';
 import { ArchitectSeal } from './components/hud/ArchitectSeal';
 import { Match3Grid } from './components/game/Match3Grid';
+import { DeployPanel } from './components/DeployPanel';
 
 /**
  * @component App
@@ -463,6 +464,8 @@ function App() {
         >
           {isConnecting ? "SYNCHRONIZING..." : "CONNECT ANCESTRAL LINK"}
         </button>
+
+        <DeployPanel />
 
         {debugLog.length > 0 && (
           <div style={{
